@@ -1,20 +1,20 @@
 # S86-2426-Klyzer-Datascience-ShopWave
 
-## Milestone: Local Setup (Python + Anaconda)
+## Milestone: Python + Conda + Jupyter Verification
 
-This section documents the local machine setup required for the Data Science sprint.
+This section records environment verification for Data Science sprint readiness.
 
-### 1) System Information
+### 1) Machine Information
 
 - **Operating System:** Windows
 - **Python Version:** 3.12.6
-- **Anaconda Version:** To be verified after installation (`conda --version`)
+- **Environment Target:** Conda `base` (or named sprint env)
 
-### 2) Python Installation Verification
+### 2) Python Verification
 
-Python is available in terminal and callable from command line.
+Python is callable and launches successfully from terminal.
 
-#### Commands used
+#### Commands
 
 ```powershell
 python --version
@@ -22,7 +22,7 @@ py --version
 where python
 ```
 
-#### Output captured
+#### Output (Captured)
 
 ```text
 Python 3.12.6
@@ -31,64 +31,69 @@ C:\Users\kisho\AppData\Local\Programs\Python\Python312\python.exe
 C:\Users\kisho\AppData\Local\Microsoft\WindowsApps\python.exe
 ```
 
-### 3) Anaconda Installation & Setup
+### 3) Conda Verification
 
-Install Anaconda (Windows) using `winget`:
-
-```powershell
-winget search Anaconda3
-winget install --id Anaconda.Anaconda3 -e --accept-package-agreements --accept-source-agreements
-```
-
-After installation, restart terminal and verify Conda:
+Run the following in terminal:
 
 ```powershell
 conda --version
-conda info
-```
-
-If `conda` is not recognized, initialize shell:
-
-```powershell
-& "$HOME\anaconda3\Scripts\conda.exe" init powershell
-```
-
-Then close and reopen terminal.
-
-### 4) Environment Validation (Data Science Ready Check)
-
-Use the following commands to validate the environment:
-
-```powershell
+conda env list
 conda activate base
-python --version
-python -c "import sys; print(sys.executable)"
-python -c "import numpy, pandas; print('numpy/pandas import OK')"
 ```
 
-Optional custom environment for sprint work:
+#### Current Observation (from this workspace shell)
+
+```text
+conda : The term 'conda' is not recognized as the name of a cmdlet...
+```
+
+This indicates Conda is either not installed in this machine context or not initialized on `PATH` for the current terminal profile.
+
+### 4) Jupyter Verification
+
+Run the following in terminal:
 
 ```powershell
-conda create -n ds-sprint python=3.12 -y
-conda activate ds-sprint
-python --version
+jupyter --version
+jupyter notebook
+# or
+jupyter lab
 ```
 
-### 5) Proof for PR Submission
+Inside Jupyter, run a test cell:
 
-Include the following in your PR:
+```python
+print("Jupyter kernel is working")
+```
 
-1. Terminal screenshot/output of `python --version`
-2. Terminal screenshot/output of `conda --version`
-3. Terminal screenshot/output of successful environment activation
-4. Link to a ~2 minute setup walkthrough video showing:
-	- Python version check
-	- Conda version check
-	- Quick walkthrough of this README section
-	- Brief explanation of what was verified
+#### Current Observation (from this workspace shell)
 
-### 6) Current Verification Status (This Machine)
+```text
+jupyter : The term 'jupyter' is not recognized as the name of a cmdlet...
+```
 
-- [x] Python is installed and verified (`3.12.6`)
-- [ ] Anaconda/Conda verification pending completion in terminal
-- [ ] Final proof screenshots/video to be attached in PR
+### 5) PR Evidence Checklist
+
+Include all of the following in the PR:
+
+1. `python --version` output
+2. `conda --version` output
+3. `conda env list` and active environment prompt after `conda activate base`
+4. Jupyter notebook/lab launch proof and one successful Python cell output
+5. Link to a ~2 minute walkthrough video
+
+### 6) Video Walkthrough Checklist (~2 mins)
+
+- Show terminal: Python version check
+- Show terminal: Conda version + environment activation
+- Show Jupyter Notebook/Lab running one Python cell
+- Show this README verification section
+- Briefly explain what was verified and why
+
+### 7) Verification Status
+
+- [x] Python verified
+- [ ] Conda verified in active shell
+- [ ] Jupyter verified in active shell
+- [ ] PR link attached
+- [ ] Video link attached
