@@ -243,3 +243,95 @@ For complete instructions, see **[MILESTONE_4_8_QUICK_GUIDE.md](MILESTONE_4_8_QU
 **Current Status:** ✅ Setup Complete - Ready for Video Recording
 
 **Next Action:** Open the notebook in Jupyter and record your demonstration following the quick guide.
+
+---
+
+## Milestone 4.9: Running, Restarting, and Interrupting Jupyter Kernels
+
+### Objective
+
+Understand how Jupyter kernels work and learn to control them safely for debugging, reproducibility, and maintaining clean notebook state.
+
+### Setup Complete
+
+- ✅ Kernel management demonstration notebook created (`milestone_4_9_kernels.ipynb`)
+- ✅ Examples of running, interrupting, and restarting included
+- ✅ Long-running and infinite loop exercises prepared
+- ✅ Quick guide documentation created
+
+### Files Created for This Milestone
+
+1. **`notebooks/milestone_4_9_kernels.ipynb`** - Complete kernel management demonstration
+2. **`MILESTONE_4_9_QUICK_GUIDE.md`** - Video recording guide with detailed script
+
+### Key Concepts
+
+**Jupyter Kernel:**
+- The computational engine that executes your code
+- Maintains memory and state between cell executions
+- Can be in idle (ready) or busy (executing) state
+
+**Running Cells:**
+- Executes code and maintains state in kernel memory
+- Variables persist until kernel is restarted
+- Execution order matters, not cell position
+
+**Interrupting:**
+- Stops current execution without clearing memory
+- Use for long-running or stuck cells
+- Kernel remains responsive afterward
+
+**Restarting:**
+- Clears all variables and memory
+- Provides a clean slate for testing
+- Essential for reproducibility testing
+
+### Quick Start
+
+**Open the notebook in Jupyter:**
+
+1. Make sure Jupyter is running (see Milestone 4.7)
+2. Navigate to `notebooks/` folder
+3. Open `milestone_4_9_kernels.ipynb`
+4. Work through the exercises to practice kernel control
+
+### Video Recording Requirements
+
+Record a ~2 minute screen capture showing:
+- ✅ Running cells in sequence (show kernel indicator)
+- ✅ Interrupting a long-running cell
+- ✅ Restarting the kernel
+- ✅ Running all cells after restart
+- ✅ Explaining when to use each action
+
+### Key Actions to Demonstrate
+
+**Interrupt:** `Kernel → Interrupt` (or stop button)
+- Stops execution, keeps variables in memory
+
+**Restart:** `Kernel → Restart`
+- Clears all memory, fresh start
+
+**Restart & Run All:** `Kernel → Restart & Run All`
+- Tests complete notebook reproducibility
+
+### Submission Checklist
+
+- [ ] Opened `milestone_4_9_kernels.ipynb` in Jupyter
+- [ ] Practiced running cells in sequence
+- [ ] Interrupted the countdown cell
+- [ ] Restarted the kernel and observed variables cleared
+- [ ] Tested "Restart & Run All"
+- [ ] Recorded 2-minute walkthrough video
+- [ ] Video uploaded and link ready
+- [ ] Pull Request created (if required)
+
+### Documentation
+
+For complete instructions, see **[MILESTONE_4_9_QUICK_GUIDE.md](MILESTONE_4_9_QUICK_GUIDE.md)**
+
+### Status
+
+**Current Status:** ✅ Setup Complete - Ready for Video Recording
+
+**Next Action:** Open the notebook in Jupyter and practice kernel management, then record your demonstration following the quick guide.
