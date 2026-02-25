@@ -171,3 +171,75 @@ For complete instructions, see **[JUPYTER_LAUNCH_GUIDE.md](JUPYTER_LAUNCH_GUIDE.
 **Current Status:** ✅ Setup Complete - Ready for Video Recording
 
 **Next Action:** Launch Jupyter and record your walkthrough video following the guide.
+
+---
+
+## Milestone 4.8: Understanding Notebook Cells - Code vs Markdown
+
+### Objective
+
+Demonstrate clear understanding of the difference between Code cells and Markdown cells, and use them intentionally to create readable, professional notebooks.
+
+### Setup Complete
+
+- ✅ Demonstration notebook created (`milestone_4_8_cells.ipynb`)
+- ✅ Examples of both Code and Markdown cells included
+- ✅ Cell switching demonstrations prepared
+- ✅ Quick guide documentation created
+
+### Files Created for This Milestone
+
+1. **`notebooks/milestone_4_8_cells.ipynb`** - Complete demonstration notebook
+2. **`MILESTONE_4_8_QUICK_GUIDE.md`** - Video recording guide and shortcuts
+
+### Key Concepts
+
+**Code Cells:**
+- Execute Python code
+- Show computational output
+- Perform operations and calculations
+- Should contain logic, not lengthy explanations
+
+**Markdown Cells:**
+- Provide explanation and context
+- Create structure with headings
+- Document reasoning and methodology
+- Should contain narrative, not code execution
+
+### Quick Start
+
+**Open the notebook in Jupyter:**
+
+1. Make sure Jupyter is running (see Milestone 4.7)
+2. Navigate to `notebooks/` folder
+3. Open `milestone_4_8_cells.ipynb`
+4. Run cells and observe the difference between types
+
+### Video Recording Requirements
+
+Record a ~2 minute screen capture showing:
+- ✅ Demonstrating a Code cell (run it, show output)
+- ✅ Demonstrating a Markdown cell (edit and render)
+- ✅ Switching between cell types
+- ✅ Creating new cells of both types
+- ✅ Explaining when to use Code vs Markdown
+
+### Submission Checklist
+
+- [ ] Opened `milestone_4_8_cells.ipynb` in Jupyter
+- [ ] Ran all Code cells successfully
+- [ ] Demonstrated cell type switching
+- [ ] Created new cells (both types)
+- [ ] Recorded 2-minute walkthrough video
+- [ ] Video uploaded and link ready
+- [ ] Pull Request created (if required)
+
+### Documentation
+
+For complete instructions, see **[MILESTONE_4_8_QUICK_GUIDE.md](MILESTONE_4_8_QUICK_GUIDE.md)**
+
+### Status
+
+**Current Status:** ✅ Setup Complete - Ready for Video Recording
+
+**Next Action:** Open the notebook in Jupyter and record your demonstration following the quick guide.
