@@ -335,3 +335,107 @@ For complete instructions, see **[MILESTONE_4_9_QUICK_GUIDE.md](MILESTONE_4_9_QU
 **Current Status:** ✅ Setup Complete - Ready for Video Recording
 
 **Next Action:** Open the notebook in Jupyter and practice kernel management, then record your demonstration following the quick guide.
+
+---
+
+## Milestone 4.10: Writing Markdown for Headings, Lists, and Code Blocks
+
+### Objective
+
+Learn to write clear, professional Markdown documentation in Jupyter Notebooks using proper formatting for headings, lists, inline code, and code blocks.
+
+### Setup Complete
+
+- ✅ Comprehensive Markdown demonstration notebook created (`milestone_4_10_markdown.ipynb`)
+- ✅ Examples of all major Markdown elements included
+- ✅ Practice exercises and real-world examples prepared
+- ✅ Quick guide documentation created
+
+### Files Created for This Milestone
+
+1. **`notebooks/milestone_4_10_markdown.ipynb`** - Complete Markdown formatting demonstration
+2. **`MILESTONE_4_10_QUICK_GUIDE.md`** - Video recording guide with syntax reference
+
+### Key Concepts
+
+**Headings:**
+- Structure notebooks with logical hierarchy
+- Use `#` symbols (# for H1, ## for H2, etc.)
+- Make navigation clear and intuitive
+
+**Lists:**
+- Unordered lists for bullet points (use `-`, `*`, or `+`)
+- Ordered lists for sequential steps (use `1.`, `2.`, etc.)
+- Nested lists for hierarchical information
+
+**Inline Code:**
+- Reference variables, functions, and short code snippets
+- Use backticks: `` `code` ``
+- Improves readability in explanatory text
+
+**Code Blocks:**
+- Display multi-line code without execution
+- Use triple backticks with language: `` ```python ``
+- Useful for showing examples and syntax
+
+**Best Practice:**
+- Markdown before code = explain intent
+- Markdown after code = interpret results
+- Avoid long explanations in code comments
+
+### Quick Start
+
+**Open the notebook in Jupyter:**
+
+1. Make sure Jupyter is running (see Milestone 4.7)
+2. Navigate to `notebooks/` folder
+3. Open `milestone_4_10_markdown.ipynb`
+4. Double-click Markdown cells to see raw syntax
+5. Practice creating your own formatted cells
+
+### Video Recording Requirements
+
+Record a ~2 minute screen capture showing:
+- ✅ Creating a new Markdown cell
+- ✅ Writing headings at different levels
+- ✅ Creating bulleted and numbered lists
+- ✅ Using inline code (backticks)
+- ✅ Creating code blocks (triple backticks)
+- ✅ Explaining why Markdown documentation matters
+
+### Key Syntax to Demonstrate
+
+**Headings:** `#`, `##`, `###`
+
+**Lists:**
+- Bullets: `- item`
+- Numbers: `1. item`
+
+**Code:**
+- Inline: `` `variable` ``
+- Block: `` ```python ``
+
+### Submission Checklist
+
+- [ ] Opened `milestone_4_10_markdown.ipynb` in Jupyter
+- [ ] Read through all Markdown examples
+- [ ] Double-clicked cells to see raw syntax
+- [ ] Created practice Markdown cells
+- [ ] Recorded 2-minute walkthrough video showing:
+  - Creating Markdown cells
+  - Writing headings
+  - Creating lists
+  - Using inline code and code blocks
+  - Explaining importance of documentation
+- [ ] Video uploaded and link ready
+- [ ] Pull Request created (if required)
+
+### Documentation
+
+For complete instructions and syntax reference, see **[MILESTONE_4_10_QUICK_GUIDE.md](MILESTONE_4_10_QUICK_GUIDE.md)**
+
+### Status
+
+**Current Status:** ✅ Setup Complete - Ready for Video Recording
+
+**Next Action:** Open the notebook in Jupyter, study the examples, practice creating formatted Markdown, then record your demonstration following the quick guide.
