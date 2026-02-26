@@ -594,3 +594,199 @@ For video recording guide, see **[MILESTONE_4_11_QUICK_GUIDE.md](MILESTONE_4_11_
 **Current Status:** ✅ Setup Complete - Ready for Video Recording
 
 **Next Action:** Explore the folder structure, read the documentation in each folder, then record your demonstration following the quick guide. Use File Explorer or terminal (`tree` command) to show the structure clearly.
+
+---
+
+## Milestone 4.12: Organizing Raw Data, Processed Data, and Output Artifacts
+
+### Overview
+
+This milestone focuses on understanding the **data lifecycle**—from raw inputs to processed datasets and final outputs. Proper data organization prevents corruption, enables reproducibility, and maintains data integrity.
+
+**Key Concept:** Data flows in ONE direction: **raw → processed → outputs**
+
+### Learning Objectives
+
+By completing this milestone, you will:
+
+- ✅ Understand the difference between raw, processed, and output data
+- ✅ Learn why raw data should **never** be modified
+- ✅ Organize data into clearly defined folders
+- ✅ Prevent accidental overwrites and data leakage
+- ✅ Build habits that support reproducibility
+
+### Three Data Stages
+
+#### 1. Raw Data (`data/raw/`)
+
+**Purpose:** Original, untouched source data
+
+**Rules:**
+- ✅ Store data exactly as received
+- ✅ Treat as **READ-ONLY** (never modify)
+- ✅ Keep original file names when possible
+- ✅ Back up securely
+- ❌ Never clean or edit raw files directly
+- ❌ Never overwrite with processed versions
+
+**Example:**
+```
+data/raw/
+  └── sample_sales.csv    ← Original data, NEVER modified
+```
+
+#### 2. Processed Data (`data/processed/`)
+
+**Purpose:** Cleaned, transformed, or filtered versions of raw data
+
+**Rules:**
+- ✅ Save cleaned/transformed datasets here
+- ✅ Use descriptive names indicating processing stage
+- ✅ Ensure these can be recreated from raw data + scripts
+- ❌ Never mix with raw data
+- ❌ Never save outputs here
+
+**Example:**
+```
+data/processed/
+  └── sample_sales_cleaned.csv    ← Derived from raw, reproducible
+```
+
+#### 3. Output Artifacts (`outputs/`)
+
+**Purpose:** Final or intermediate results (visualizations, reports, models)
+
+**Rules:**
+- ✅ Store plots in `outputs/figures/`
+- ✅ Store reports in `outputs/reports/`
+- ✅ Use descriptive filenames
+- ❌ Never save in data folders
+- ❌ Never mix with input data
+
+**Example:**
+```
+outputs/
+  ├── figures/
+  │   └── top_customers.png              ← Visualization
+  └── reports/
+      └── sales_summary_statistics.csv   ← Report
+```
+
+### Data Flow Diagram
+
+```
+data/raw/sample_sales.csv (ORIGINAL, READ-ONLY)
+         ↓
+    [LOAD & CLEAN]
+         ↓
+data/processed/sample_sales_cleaned.csv (REPRODUCIBLE)
+         ↓
+    [ANALYZE & VISUALIZE]
+         ↓
+    ┌──────────────┬──────────────┐
+    ↓              ↓              ↓
+outputs/       outputs/      outputs/
+figures/       reports/      models/
+```
+
+### Why This Matters
+
+**Common problems prevented:**
+- 🔥 Raw data being overwritten accidentally
+- 🔥 No record of how processed data was created
+- 🔥 Outputs mixed with input data
+- 🔥 Confusion about which files are final
+- 🔥 Inability to reproduce results later
+
+**Benefits of proper organization:**
+- ✅ Raw data remains intact (data integrity)
+- ✅ Processing steps are traceable (transparency)
+- ✅ Outputs are clearly identifiable (clarity)
+- ✅ Results can be reproduced reliably (reproducibility)
+
+### Demonstrations
+
+#### Working Example Notebook
+
+**[data_lifecycle_demo.ipynb](notebooks/data_lifecycle_demo.ipynb)** - Complete demonstration:
+- Loads raw data (read-only)
+- Processes and saves to processed folder
+- Analyzes processed data
+- Generates outputs to correct locations
+- Verifies all stages properly separated
+
+#### Live Working Pipeline
+
+**[structure_demo.ipynb](notebooks/structure_demo.ipynb)** - Real data pipeline:
+1. Imports custom functions from `src/data_processing.py`
+2. Loads raw data from `data/raw/sample_sales.csv` (never modifies it!)
+3. Cleans and saves to `data/processed/`
+4. Performs analysis ($929.82 revenue calculated)
+5. Generates visualization → `outputs/figures/`
+6. Creates report → `outputs/reports/`
+
+### Key Principles
+
+#### ⚠️ What NOT to Do
+
+```python
+# ❌ BAD - Overwrites raw data!
+df = pd.read_csv('data/raw/sales.csv')
+df = df.dropna()
+df.to_csv('data/raw/sales.csv')  # DANGER! Original lost forever!
+```
+
+#### ✅ What TO Do
+
+```python
+# ✅ GOOD - Preserves raw data
+df = pd.read_csv('data/raw/sales.csv')         # Load raw (read-only)
+df_cleaned = df.dropna()                       # Process in memory
+df_cleaned.to_csv('data/processed/sales_cleaned.csv')  # Save separately
+```
+
+### Video Walkthrough Requirements (~2 Minutes)
+
+Your video must include:
+
+1. **Raw data folder** - Show location, explain read-only principle
+2. **Processed data folder** - Show derived datasets, explain reproducibility
+3. **Output artifacts folder** - Show figures and reports organization
+4. **Data flow demonstration** - Run notebook showing raw → processed → outputs
+5. **Rationale** - Explain why separation prevents corruption and enables reproducibility
+
+### Documentation
+
+For detailed principles and examples:
+- **[DATA_ORGANIZATION_GUIDE.md](DATA_ORGANIZATION_GUIDE.md)** - Complete data lifecycle guide
+- **[MILESTONE_4_12_QUICK_GUIDE.md](MILESTONE_4_12_QUICK_GUIDE.md)** - Video script and checklist
+- **[PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)** - Overall project organization
+
+### Submission Checklist
+
+- [ ] Reviewed data lifecycle principles
+- [ ] Examined `data/raw/`, `data/processed/`, `outputs/` folders
+- [ ] Read `DATA_ORGANIZATION_GUIDE.md`
+- [ ] Ran `data_lifecycle_demo.ipynb` notebook
+- [ ] Recorded 2-minute walkthrough video showing:
+  - Raw data folder and read-only rule
+  - Processed data folder and reproducibility
+  - Output folders organization
+  - Live demonstration of data flow
+  - Explanation of why separation matters
+- [ ] Video uploaded and link ready
+- [ ] Pull Request created (if required)
+
+### Status
+
+**Current Status:** ✅ Setup Complete - Ready for Testing and Video Recording
+
+**Files Created:**
+- ✅ `data/raw/sample_sales.csv` - Sample raw data
+- ✅ `data/processed/sample_sales_cleaned.csv` - Sample processed data
+- ✅ `outputs/figures/top_customers.png` - Sample visualization
+- ✅ `outputs/reports/sales_summary_statistics.csv` - Sample report
+- ✅ `notebooks/data_lifecycle_demo.ipynb` - Complete walkthrough notebook
+- ✅ `DATA_ORGANIZATION_GUIDE.md` - Comprehensive documentation
+
+**Next Action:** Run `data_lifecycle_demo.ipynb` to see the complete data lifecycle in action, then record your demonstration following the quick guide.
