@@ -915,3 +915,44 @@ Record a short screen capture showing:
 ### Documentation
 
 For complete walkthrough steps, use **[MILESTONE_4_18_QUICK_GUIDE.md](MILESTONE_4_18_QUICK_GUIDE.md)**
+
+---
+
+## Milestone 4.19: Passing Data into Functions and Returning Results
+
+### Objective
+
+Use Python functions as reusable input-output units by passing arguments and returning computed results.
+
+### Files Created for This Milestone
+
+1. **`src/functions_input_output_demo.py`** - Standalone functions input/output demo
+2. **`MILESTONE_4_19_QUICK_GUIDE.md`** - Quick guide, checklist, and 2-minute video script
+
+### Quick Start
+
+Run from project root:
+
+```powershell
+python src/functions_input_output_demo.py
+```
+
+### What This Demonstrates
+
+- Defining functions with parameters
+- Passing arguments during function calls
+- Returning values with `return`
+- Storing and reusing returned results
+- Clear and predictable input-output behavior
+
+### Video Recording Requirements (~2 Minutes)
+
+Record a short screen capture showing:
+- ✅ A function with parameters
+- ✅ Passing arguments into the function
+- ✅ Returning a value
+- ✅ Using the returned result elsewhere
+
+### Documentation
+
+For complete walkthrough steps, use **[MILESTONE_4_19_QUICK_GUIDE.md](MILESTONE_4_19_QUICK_GUIDE.md)**
