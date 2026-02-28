@@ -790,3 +790,46 @@ For detailed principles and examples:
 - ✅ `DATA_ORGANIZATION_GUIDE.md` - Comprehensive documentation
 
 **Next Action:** Run `data_lifecycle_demo.ipynb` to see the complete data lifecycle in action, then record your demonstration following the quick guide.
+
+---
+
+## Milestone 4.16: Writing Conditional Statements for Data Logic
+
+### Objective
+
+Use Python conditional statements to control program flow using clear, correct decision logic.
+
+### Files Created for This Milestone
+
+1. **`src/conditional_statements_demo.py`** - Standalone conditional logic script
+2. **`MILESTONE_4_16_QUICK_GUIDE.md`** - Quick guide, checklist, and 2-minute video script
+
+### Quick Start
+
+Run from project root:
+
+```powershell
+python src/conditional_statements_demo.py
+```
+
+### What This Demonstrates
+
+- Basic `if` statement
+- `if-else` branching
+- `if-elif-else` with multiple outcomes
+- Numeric and string comparisons
+- Logical operators: `and`, `or`, `not`
+- Edge-case threshold handling
+
+### Video Recording Requirements (~2 Minutes)
+
+Record a short screen capture showing:
+- ✅ A simple `if` example
+- ✅ An `if-else` example
+- ✅ An `if-elif-else` example
+- ✅ Logical operators in action
+- ✅ Explanation of decision outcomes
+
+### Documentation
+
+For complete walkthrough steps, use **[MILESTONE_4_16_QUICK_GUIDE.md](MILESTONE_4_16_QUICK_GUIDE.md)**
