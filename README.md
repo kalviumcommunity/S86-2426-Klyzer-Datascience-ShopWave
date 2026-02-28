@@ -956,3 +956,44 @@ Record a short screen capture showing:
 ### Documentation
 
 For complete walkthrough steps, use **[MILESTONE_4_19_QUICK_GUIDE.md](MILESTONE_4_19_QUICK_GUIDE.md)**
+
+---
+
+## Milestone 4.20: Writing Readable Variable Names and Comments (PEP 8 Basics)
+
+### Objective
+
+Improve Python code readability using descriptive naming and meaningful comments.
+
+### Files Created for This Milestone
+
+1. **`src/readable_naming_comments_demo.py`** - Standalone readability demo script
+2. **`MILESTONE_4_20_QUICK_GUIDE.md`** - Quick guide, checklist, and 2-minute video script
+
+### Quick Start
+
+Run from project root:
+
+```powershell
+python src/readable_naming_comments_demo.py
+```
+
+### What This Demonstrates
+
+- Good vs poor variable naming examples
+- PEP 8 snake_case naming for variables
+- Uppercase constant naming
+- Useful comments that explain intent
+- Common readability mistakes to avoid
+
+### Video Recording Requirements (~2 Minutes)
+
+Record a short screen capture showing:
+- ✅ Good vs poor variable names
+- ✅ Corrected variable names using PEP 8
+- ✅ Useful comments in context
+- ✅ Explanation of why readability matters
+
+### Documentation
+
+For complete walkthrough steps, use **[MILESTONE_4_20_QUICK_GUIDE.md](MILESTONE_4_20_QUICK_GUIDE.md)**
