@@ -997,3 +997,43 @@ Record a short screen capture showing:
 ### Documentation
 
 For complete walkthrough steps, use **[MILESTONE_4_20_QUICK_GUIDE.md](MILESTONE_4_20_QUICK_GUIDE.md)**
+
+---
+
+## Milestone 4.21: Structuring Python Code for Readability and Reuse
+
+### Objective
+
+Organize Python code into clear sections and reusable functions for maintainability.
+
+### Files Created for This Milestone
+
+1. **`src/code_structure_readability_reuse_demo.py`** - Standalone structure and reuse demo script
+2. **`MILESTONE_4_21_QUICK_GUIDE.md`** - Quick guide, checklist, and 2-minute video script
+
+### Quick Start
+
+Run from project root:
+
+```powershell
+python src/code_structure_readability_reuse_demo.py
+```
+
+### What This Demonstrates
+
+- Organizing code into setup, helper logic, and execution sections
+- Replacing repeated blocks with reusable functions
+- Keeping top-level execution clean via `main()`
+- Improving readability with clear flow and naming
+
+### Video Recording Requirements (~2 Minutes)
+
+Record a short screen capture showing:
+- ✅ Script structure overview
+- ✅ Explanation of code sections
+- ✅ Use of functions for reuse
+- ✅ Why structure improves readability
+
+### Documentation
+
+For complete walkthrough steps, use **[MILESTONE_4_21_QUICK_GUIDE.md](MILESTONE_4_21_QUICK_GUIDE.md)**
