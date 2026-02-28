@@ -874,3 +874,44 @@ Record a short screen capture showing:
 ### Documentation
 
 For complete walkthrough steps, use **[MILESTONE_4_17_QUICK_GUIDE.md](MILESTONE_4_17_QUICK_GUIDE.md)**
+
+---
+
+## Milestone 4.18: Defining and Calling Python Functions
+
+### Objective
+
+Use Python functions to organize code into reusable, logical blocks.
+
+### Files Created for This Milestone
+
+1. **`src/functions_definition_calling_demo.py`** - Standalone functions demo script
+2. **`MILESTONE_4_18_QUICK_GUIDE.md`** - Quick guide, checklist, and 2-minute video script
+
+### Quick Start
+
+Run from project root:
+
+```powershell
+python src/functions_definition_calling_demo.py
+```
+
+### What This Demonstrates
+
+- Defining functions with `def`
+- Calling functions from `main()`
+- Using parameters and arguments
+- Returning values and reusing results
+- Basic local vs global scope behavior
+
+### Video Recording Requirements (~2 Minutes)
+
+Record a short screen capture showing:
+- ✅ Defining at least one function
+- ✅ Calling the function
+- ✅ Passing arguments
+- ✅ Explaining execution flow
+
+### Documentation
+
+For complete walkthrough steps, use **[MILESTONE_4_18_QUICK_GUIDE.md](MILESTONE_4_18_QUICK_GUIDE.md)**
