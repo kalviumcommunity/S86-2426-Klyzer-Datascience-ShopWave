@@ -833,3 +833,44 @@ Record a short screen capture showing:
 ### Documentation
 
 For complete walkthrough steps, use **[MILESTONE_4_16_QUICK_GUIDE.md](MILESTONE_4_16_QUICK_GUIDE.md)**
+
+---
+
+## Milestone 4.17: Using for and while Loops for Iterative Data Processing
+
+### Objective
+
+Use Python loops to process repeated logic safely and clearly.
+
+### Files Created for This Milestone
+
+1. **`src/loops_iterative_processing_demo.py`** - Standalone loops demo script
+2. **`MILESTONE_4_17_QUICK_GUIDE.md`** - Quick guide, checklist, and 2-minute video script
+
+### Quick Start
+
+Run from project root:
+
+```powershell
+python src/loops_iterative_processing_demo.py
+```
+
+### What This Demonstrates
+
+- `for` loop with range iteration
+- `for` loop with list iteration
+- `while` loop with condition-based repetition
+- Loop control using `break` and `continue`
+- Safe loop termination patterns to avoid infinite loops
+
+### Video Recording Requirements (~2 Minutes)
+
+Record a short screen capture showing:
+- ✅ A `for` loop example
+- ✅ A `while` loop example
+- ✅ Use of `break` or `continue`
+- ✅ Explanation of loop behavior and flow
+
+### Documentation
+
+For complete walkthrough steps, use **[MILESTONE_4_17_QUICK_GUIDE.md](MILESTONE_4_17_QUICK_GUIDE.md)**
