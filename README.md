@@ -1037,3 +1037,212 @@ Record a short screen capture showing:
 ### Documentation
 
 For complete walkthrough steps, use **[MILESTONE_4_21_QUICK_GUIDE.md](MILESTONE_4_21_QUICK_GUIDE.md)**
+
+---
+
+## Milestone 4.22: Creating NumPy Arrays from Python Lists
+
+### Objective
+
+Learn to create NumPy arrays from Python lists and understand why NumPy is essential for numerical computing in Data Science.
+
+### Overview
+
+NumPy (Numerical Python) is the foundational library for numerical computing in Python. NumPy arrays are:
+- ✅ **Fast** - Operations run at C speed
+- ✅ **Memory-efficient** - Homogeneous type, contiguous memory
+- ✅ **Powerful** - Element-wise operations built-in
+- ✅ **Foundation** - Used by Pandas, scikit-learn, and all ML libraries
+
+This milestone focuses on the fundamental skill: **converting Python lists to NumPy arrays**.
+
+### Learning Objectives
+
+By completing this milestone, you will:
+
+- ✅ Understand why NumPy is faster than Python lists for numerical work
+- ✅ Import NumPy correctly (`import numpy as np`)
+- ✅ Create 1D arrays from simple lists
+- ✅ Create 2D arrays from nested lists
+- ✅ Inspect array properties (shape, dtype, ndim, size)
+- ✅ Perform element-wise arithmetic operations
+- ✅ Use built-in array functions (sum, mean, max, min)
+- ✅ Recognize when to use arrays vs lists
+
+### Files Created for This Milestone
+
+1. **`notebooks/milestone_4_22_numpy_arrays.ipynb`** - Complete NumPy array demonstration notebook
+2. **`MILESTONE_4_22_QUICK_GUIDE.md`** - Video recording guide with detailed script
+
+### Quick Start
+
+**Open the notebook in Jupyter:**
+
+1. Make sure Jupyter is running
+2. Navigate to `notebooks/` folder
+3. Open `milestone_4_22_numpy_arrays.ipynb`
+4. Run all cells to see NumPy arrays in action
+
+**Install NumPy (if needed):**
+
+```powershell
+pip install numpy
+# or if using conda
+conda install numpy
+```
+
+### Key Concepts
+
+#### Creating Arrays
+
+```python
+import numpy as np
+
+# 1D array from list
+arr = np.array([1, 2, 3, 4, 5])
+print(arr)  # [1 2 3 4 5]
+
+# 2D array from nested list
+matrix = np.array([[1, 2, 3],
+                   [4, 5, 6]])
+print(matrix.shape)  # (2, 3) - 2 rows, 3 columns
+```
+
+#### Array Properties
+
+```python
+arr = np.array([1, 2, 3, 4, 5])
+
+print(arr.shape)  # (5,) - shape tuple
+print(arr.dtype)  # int32 or int64 - data type
+print(arr.ndim)   # 1 - number of dimensions
+print(arr.size)   # 5 - total elements
+```
+
+#### Element-wise Operations
+
+```python
+arr = np.array([1, 2, 3, 4, 5])
+
+# Operations apply to ALL elements
+print(arr * 2)      # [2 4 6 8 10]
+print(arr + 10)     # [11 12 13 14 15]
+print(arr ** 2)     # [1 4 9 16 25]
+
+# Built-in functions
+print(arr.sum())    # 15
+print(arr.mean())   # 3.0
+print(arr.max())    # 5
+```
+
+### Why NumPy vs Python Lists?
+
+| Feature | Python Lists | NumPy Arrays |
+|---------|-------------|--------------|
+| Speed | Slow (Python loops) | Fast (C speed) |
+| Memory | Inefficient | Efficient |
+| Types | Mixed types allowed | Homogeneous (same type) |
+| Operations | Manual loops needed | Element-wise automatic |
+| Math functions | Not built-in | Rich library included |
+| Use case | General collections | Numerical computing |
+
+**Rule of thumb:**
+- Use **lists** for mixed data, dynamic collections
+- Use **arrays** for numerical data, math operations
+
+### What the Notebook Demonstrates
+
+**Part 1:** Why NumPy? (comparison with lists)
+
+**Part 2:** Creating 1D arrays from lists
+
+**Part 3:** Inspecting array properties (shape, dtype, ndim)
+
+**Part 4:** Creating 2D arrays from nested lists
+
+**Part 5:** Element-wise arithmetic operations
+
+**Part 6:** Built-in mathematical functions
+
+**Part 7:** Practical examples (temperature conversion, sales analysis, test scores)
+
+### Video Recording Requirements (~2 Minutes)
+
+Record a screen capture showing:
+
+1. **Import NumPy** (~10 sec)
+   - Show `import numpy as np`
+   - Verify version
+
+2. **Create 1D Array** (~25 sec)
+   - Convert list to array with `np.array()`
+   - Show shape, dtype, ndim
+
+3. **Create 2D Array** (~25 sec)
+   - Create from nested list
+   - Explain shape (rows, columns)
+
+4. **Element-wise Operations** (~30 sec)
+   - Show arithmetic operations (multiply, add)
+   - Demonstrate built-in functions (mean, sum)
+   - Compare with list approach
+
+5. **Lists vs Arrays** (~15 sec)
+   - Summarize key differences
+   - Explain when to use each
+
+6. **Closing** (~15 sec)
+   - Confirm understanding of array creation
+   - Mention NumPy as foundation for data science
+
+### Key Points to Emphasize
+
+1. **NumPy is essential** - Foundation of Python data science ecosystem
+2. **Homogeneous data** - All elements must be same type
+3. **Shape matters** - Understanding dimensions prevents errors
+4. **Element-wise operations** - The power and convenience of NumPy
+5. **Performance** - NumPy is much faster than lists for numerical work
+
+### Common Mistakes to Avoid
+
+❌ Forgetting to import NumPy: `import numpy as np`
+
+❌ Using list operations on arrays (e.g., `.append()`)
+
+❌ Mixing types in array creation (causes unwanted type conversion)
+
+❌ Confusing shape `(5,)` with `(5, 1)` for 1D arrays
+
+❌ Using loops when element-wise operations would work
+
+### Submission Checklist
+
+- [ ] NumPy installed and imported successfully
+- [ ] Opened `milestone_4_22_numpy_arrays.ipynb` in Jupyter
+- [ ] Ran all cells successfully
+- [ ] Created own 1D array examples
+- [ ] Created own 2D array examples
+- [ ] Inspected array properties
+- [ ] Performed element-wise operations
+- [ ] Recorded 2-minute walkthrough video showing:
+  - NumPy import
+  - Array creation (1D and 2D)
+  - Property inspection (shape, dtype)
+  - Element-wise operations
+  - Lists vs arrays comparison
+- [ ] Video uploaded and link ready
+- [ ] Pull Request created (if required)
+
+### Documentation
+
+For complete instructions and video script, see **[MILESTONE_4_22_QUICK_GUIDE.md](MILESTONE_4_22_QUICK_GUIDE.md)**
+
+### Status
+
+**Current Status:** ✅ Setup Complete - Ready for Testing and Video Recording
+
+**Files Created:**
+- ✅ `notebooks/milestone_4_22_numpy_arrays.ipynb` - Comprehensive demonstration
+- ✅ `MILESTONE_4_22_QUICK_GUIDE.md` - Video script and guidelines
+
+**Next Action:** Open the notebook in Jupyter, work through all examples, then record your demonstration showing array creation and operations.
