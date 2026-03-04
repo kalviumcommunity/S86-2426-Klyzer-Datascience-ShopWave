@@ -1246,3 +1246,235 @@ For complete instructions and video script, see **[MILESTONE_4_22_QUICK_GUIDE.md
 - ✅ `MILESTONE_4_22_QUICK_GUIDE.md` - Video script and guidelines
 
 **Next Action:** Open the notebook in Jupyter, work through all examples, then record your demonstration showing array creation and operations.
+
+---
+
+## Milestone 4.23: Understanding Array Shape, Dimensions, and Index Positions
+
+### Objective
+
+Master the fundamental concepts of array shape, dimensions, and indexing to safely access and manipulate NumPy array elements.
+
+### Overview
+
+Understanding how data is organized in arrays is critical for data science work. This milestone covers:
+- ✅ **Shape** - Understanding array dimensions (rows, columns)
+- ✅ **ndim** - Number of dimensions (1D, 2D, 3D, etc.)
+- ✅ **Indexing** - Accessing specific elements safely
+- ✅ **Zero-based** - Python's indexing starts at 0
+- ✅ **Rows & Columns** - Proper [row, column] notation
+
+**Without this knowledge, you'll encounter IndexErrors, access wrong data, and struggle with data manipulation.**
+
+### Learning Objectives
+
+By completing this milestone, you will:
+
+- ✅ Read and understand array shape tuples
+- ✅ Interpret what shape (5,) vs (2, 3) means
+- ✅ Use the ndim property correctly
+- ✅ Access elements in 1D arrays with single indices
+- ✅ Access elements in 2D arrays with [row, column] notation
+- ✅ Understand zero-based indexing (first element is index 0)
+- ✅ Use negative indices to access from the end
+- ✅ Extract entire rows and columns
+- ✅ Prevent IndexError by checking shape first
+- ✅ Visualize how data is laid out in memory
+
+### Files Created for This Milestone
+
+1. **`notebooks/milestone_4_23_shape_indexing.ipynb`** - Complete shape and indexing demonstration
+2. **`MILESTONE_4_23_QUICK_GUIDE.md`** - Video recording guide with detailed script
+
+### Quick Start
+
+**Open the notebook in Jupyter:**
+
+1. Make sure Jupyter is running
+2. Navigate to `notebooks/` folder
+3. Open `milestone_4_23_shape_indexing.ipynb`
+4. Run all cells to see shape and indexing in action
+
+### Key Concepts
+
+#### Understanding Shape
+
+```python
+import numpy as np
+
+# 1D array - shape is (n,)
+arr_1d = np.array([10, 20, 30, 40, 50])
+print(arr_1d.shape)  # (5,) - 5 elements
+
+# 2D array - shape is (rows, columns)
+arr_2d = np.array([[1, 2, 3],
+                   [4, 5, 6]])
+print(arr_2d.shape)  # (2, 3) - 2 rows, 3 columns
+```
+
+#### Understanding Dimensions (ndim)
+
+```python
+arr_1d = np.array([1, 2, 3])
+arr_2d = np.array([[1, 2], [3, 4]])
+arr_3d = np.array([[[1, 2]], [[3, 4]]])
+
+print(arr_1d.ndim)  # 1
+print(arr_2d.ndim)  # 2
+print(arr_3d.ndim)  # 3
+```
+
+#### Indexing 1D Arrays
+
+```python
+arr = np.array([10, 20, 30, 40, 50])
+
+# Positive indexing
+print(arr[0])   # 10 - first element
+print(arr[2])   # 30 - third element
+print(arr[4])   # 50 - last element
+
+# Negative indexing
+print(arr[-1])  # 50 - last element
+print(arr[-2])  # 40 - second to last
+```
+
+#### Indexing 2D Arrays
+
+```python
+matrix = np.array([[1, 2, 3],
+                   [4, 5, 6],
+                   [7, 8, 9]])
+
+# Format: [row, column]
+print(matrix[0, 0])   # 1 - top-left
+print(matrix[1, 1])   # 5 - center
+print(matrix[2, 2])   # 9 - bottom-right
+
+# Entire rows
+print(matrix[0])      # [1 2 3] - first row
+
+# Entire columns
+print(matrix[:, 0])   # [1 4 7] - first column
+```
+
+### Shape and Indexing Rules
+
+| Shape | Valid Indices | Example |
+|-------|---------------|---------|
+| (5,) | 0 to 4 | arr[0], arr[4] |
+| (2, 3) | Rows: 0-1, Cols: 0-2 | arr[0, 0], arr[1, 2] |
+| (3, 4) | Rows: 0-2, Cols: 0-3 | arr[2, 3] |
+
+**Critical Rules:**
+- ⚠️ Indexing starts at **0**, not 1
+- ⚠️ For 2D arrays: **[row, column]** NOT [column, row]
+- ⚠️ Maximum index is **shape - 1**
+- ⚠️ arr[5] with shape (5,) causes **IndexError**
+
+### What the Notebook Demonstrates
+
+**Part 1:** Why shape and indexing matter
+
+**Part 2:** Understanding array shape (1D and 2D)
+
+**Part 3:** Understanding dimensions (ndim)
+
+**Part 4:** Indexing 1D arrays (positive and negative)
+
+**Part 5:** Indexing 2D arrays with [row, column]
+
+**Part 6:** Common mistakes and how to avoid them
+
+**Part 7:** Practical examples (grade tables, sales matrices)
+
+**Part 8:** Best practices summary
+
+### Video Recording Requirements (~2 Minutes)
+
+Record a screen capture showing:
+
+1. **Shape Inspection** (~25 sec)
+   - Show 1D array shape (5,)
+   - Show 2D array shape (2, 3)
+   - Explain what each number means
+
+2. **Dimensions (ndim)** (~20 sec)
+   - Compare 1D, 2D arrays
+   - Show relationship between shape and ndim
+
+3. **1D Indexing** (~20 sec)
+   - Access elements with arr[0], arr[2]
+   - Show negative indexing arr[-1]
+   - Explain zero-based indexing
+
+4. **2D Indexing** (~30 sec)
+   - Access with [row, column]
+   - Show arr[0, 0], arr[1, 2]
+   - Get entire row with arr[1]
+   - Get entire column with arr[:, 0]
+
+5. **Shape-Index Relationship** (~25 sec)
+   - Show how shape determines valid indices
+   - Demonstrate IndexError prevention
+   - Check shape before indexing
+
+6. **Closing** (~10 sec)
+   - Confirm understanding of shape and indexing
+   - Emphasize [row, column] and zero-based rules
+
+### Key Points to Emphasize
+
+1. **Shape first** - Always check shape before indexing
+2. **[row, column]** - Rows come FIRST in 2D arrays
+3. **Zero-based** - First element is index 0, not 1
+4. **Valid range** - With shape (n,), indices are 0 to n-1
+5. **Negative indices** - Count backwards from the end
+
+### Common Mistakes to Avoid
+
+❌ Confusing [column, row] with [row, column]
+
+❌ Forgetting indexing starts at 0 (first element is [0])
+
+❌ Accessing arr[5] when shape is (5,) - should be arr[4]
+
+❌ Not checking shape before indexing
+
+❌ Mixing 1D and 2D indexing syntax
+
+❌ Thinking shape (5,) is the same as (5, 1)
+
+### Submission Checklist
+
+- [ ] Opened `milestone_4_23_shape_indexing.ipynb` in Jupyter
+- [ ] Ran all cells successfully
+- [ ] Understood shape tuples for 1D and 2D arrays
+- [ ] Practiced accessing 1D array elements
+- [ ] Practiced accessing 2D array elements with [row, column]
+- [ ] Tested negative indexing
+- [ ] Extracted entire rows and columns
+- [ ] Understood zero-based indexing
+- [ ] Checked array shapes to prevent errors
+- [ ] Recorded 2-minute walkthrough video showing:
+  - Shape inspection (1D and 2D)
+  - Understanding ndim
+  - 1D indexing examples
+  - 2D indexing with [row, column]
+  - Preventing IndexError with shape checks
+- [ ] Video uploaded and link ready
+- [ ] Pull Request created (if required)
+
+### Documentation
+
+For complete instructions and video script, see **[MILESTONE_4_23_QUICK_GUIDE.md](MILESTONE_4_23_QUICK_GUIDE.md)**
+
+### Status
+
+**Current Status:** ✅ Setup Complete - Ready for Testing and Video Recording
+
+**Files Created:**
+- ✅ `notebooks/milestone_4_23_shape_indexing.ipynb` - Complete shape and indexing demonstration
+- ✅ `MILESTONE_4_23_QUICK_GUIDE.md` - Video script and guidelines
+
+**Next Action:** Open the notebook in Jupyter, work through all examples and indexing exercises, then record your demonstration showing shape inspection and proper indexing techniques.
