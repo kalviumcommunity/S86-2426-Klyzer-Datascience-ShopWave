@@ -1478,3 +1478,241 @@ For complete instructions and video script, see **[MILESTONE_4_23_QUICK_GUIDE.md
 - ✅ `MILESTONE_4_23_QUICK_GUIDE.md` - Video script and guidelines
 
 **Next Action:** Open the notebook in Jupyter, work through all examples and indexing exercises, then record your demonstration showing shape inspection and proper indexing techniques.
+
+---
+
+## Milestone 4.24: Performing Basic Mathematical Operations on NumPy Arrays
+
+### Objective
+
+Master performing basic mathematical operations on NumPy arrays to write concise, efficient numerical code without loops.
+
+### Overview
+
+NumPy's real power comes from applying operations to entire arrays at once. This milestone covers:
+- ✅ **Element-wise operations** - Add, subtract, multiply, divide arrays
+- ✅ **Scalar broadcasting** - Apply single values to entire arrays
+- ✅ **Vectorization** - No loops needed for array math
+- ✅ **Arrays vs Lists** - Understanding behavioral differences
+- ✅ **Efficiency** - Write fast, clean numerical code
+
+**Without this knowledge, you'll write verbose loops when one line would suffice, and miss NumPy's core advantage.**
+
+### Learning Objectives
+
+By completing this milestone, you will:
+
+- ✅ Add, subtract, multiply, and divide NumPy arrays
+- ✅ Apply scalar operations across arrays
+- ✅ Understand element-wise computation behavior
+- ✅ Compare array math with Python list behavior
+- ✅ Avoid common mistakes with array operations
+- ✅ Write concise numerical code using NumPy
+- ✅ Recognize when vectorization is possible
+- ✅ Use NumPy for efficient numerical computation
+
+### Files Created for This Milestone
+
+1. **`notebooks/milestone_4_24_array_operations.ipynb`** - Complete array operations demonstration
+2. **`MILESTONE_4_24_QUICK_GUIDE.md`** - Video recording guide with detailed script
+
+### Quick Start
+
+**Open the notebook in Jupyter:**
+
+1. Make sure Jupyter is running
+2. Navigate to `notebooks/` folder
+3. Open `milestone_4_24_array_operations.ipynb`
+4. Run all cells to see array operations in action
+
+### Key Concepts
+
+#### Element-Wise Operations
+
+```python
+import numpy as np
+
+arr1 = np.array([10, 20, 30, 40])
+arr2 = np.array([1, 2, 3, 4])
+
+# Element-wise arithmetic
+print(arr1 + arr2)  # [11 22 33 44]
+print(arr1 - arr2)  # [9 18 27 36]
+print(arr1 * arr2)  # [10 40 90 160]
+print(arr1 / arr2)  # [10. 10. 10. 10.]
+```
+
+**Key insight:** Operations apply to corresponding elements automatically.
+
+#### Scalar Broadcasting
+
+```python
+arr = np.array([10, 20, 30, 40, 50])
+
+# Scalar operations
+print(arr + 5)     # [15 25 35 45 55]
+print(arr * 2)     # [20 40 60 80 100]
+print(arr ** 2)    # [100 400 900 1600 2500]
+```
+
+**Key insight:** Single values automatically apply to all elements.
+
+#### NumPy Arrays vs Python Lists
+
+```python
+# Python list behavior
+my_list = [1, 2, 3]
+print(my_list + my_list)  # [1, 2, 3, 1, 2, 3] - concatenation
+print(my_list * 2)         # [1, 2, 3, 1, 2, 3] - repetition
+
+# NumPy array behavior
+my_array = np.array([1, 2, 3])
+print(my_array + my_array)  # [2 4 6] - addition
+print(my_array * 2)         # [2 4 6] - multiplication
+```
+
+**Key insight:** Lists concatenate/repeat, arrays perform math.
+
+#### Practical Applications
+
+```python
+# Temperature conversion in one line
+celsius = np.array([0, 10, 20, 30, 100])
+fahrenheit = celsius * 9/5 + 32
+# [32. 50. 68. 86. 212.]
+
+# Apply discount to prices
+prices = np.array([100, 200, 350, 500])
+discounted = prices * 0.80  # 20% off
+# [80. 160. 280. 400.]
+
+# Normalize data
+data = np.array([10, 20, 30, 40, 50])
+normalized = (data - data.min()) / (data.max() - data.min())
+# [0. 0.25 0.5 0.75 1.]
+```
+
+### Operation Types Summary
+
+| Operation | Syntax | Example | Result |
+|-----------|--------|---------|--------|
+| Addition | arr1 + arr2 | [1,2] + [3,4] | [4, 6] |
+| Subtraction | arr1 - arr2 | [5,4] - [1,2] | [4, 2] |
+| Multiplication | arr1 * arr2 | [2,3] * [4,5] | [8, 15] |
+| Division | arr1 / arr2 | [10,20] / [2,4] | [5., 5.] |
+| Power | arr ** n | [2,3] ** 2 | [4, 9] |
+| Scalar Add | arr + scalar | [1,2] + 10 | [11, 12] |
+| Scalar Multiply | arr * scalar | [1,2] * 5 | [5, 10] |
+
+### Critical Rules
+
+⚠️ **Element-wise operations** - Operations apply to corresponding elements  
+⚠️ **Shape compatibility** - Arrays must have compatible shapes  
+⚠️ **Scalar broadcasting** - Single values expand to entire array  
+⚠️ **No loops needed** - NumPy handles iteration internally  
+⚠️ **Lists behave differently** - Don't expect list behavior from arrays  
+
+### What the Notebook Demonstrates
+
+**Part 1:** Why NumPy math matters
+
+**Part 2:** Element-wise array operations (add, subtract, multiply, divide)
+
+**Part 3:** Scalar operations on arrays (broadcasting)
+
+**Part 4:** Comparing NumPy arrays vs Python lists
+
+**Part 5:** Avoiding common mistakes
+
+**Part 6:** Combining operations (complex formulas)
+
+**Part 7:** Best practices summary
+
+### Video Recording Requirements (~2 Minutes)
+
+Record a screen capture showing:
+
+1. **Element-Wise Operations** (~30 sec)
+   - Create two arrays
+   - Show addition, subtraction, multiplication, division
+   - Explain element-by-element computation
+
+2. **Scalar Broadcasting** (~25 sec)
+   - Apply scalar to array
+   - Show multiple scalar operations
+   - Explain automatic application to all elements
+
+3. **Arrays vs Lists** (~25 sec)
+   - Show list + list (concatenation)
+   - Show array + array (addition)
+   - Explain the key difference
+
+4. **Practical Example** (~20 sec)
+   - Temperature conversion or discount calculation
+   - Show entire operation in one line
+   - Emphasize code simplicity
+
+5. **Shape Awareness** (~15 sec)
+   - Show shape checking
+   - Demonstrate shape mismatch issue
+   - Explain compatibility requirement
+
+6. **Closing** (~5 sec)
+   - Confirm understanding of vectorized operations
+   - Emphasize efficiency and clarity
+
+### Key Points to Emphasize
+
+1. **Element-wise** - Operations apply to corresponding elements
+2. **Broadcasting** - Scalars expand automatically to array shape
+3. **Vectorization** - No explicit loops needed
+4. **Efficiency** - NumPy is 100x+ faster than Python loops
+5. **Clarity** - Mathematical intent is clear and concise
+
+### Common Mistakes to Avoid
+
+❌ Using loops for simple array operations
+
+❌ Expecting list behavior from arrays (concatenation/repetition)
+
+❌ Operating on arrays with incompatible shapes
+
+❌ Forgetting that operations are element-wise, not matrix operations
+
+❌ Not checking shapes before operations
+
+❌ Mixing lists and arrays in operations
+
+### Submission Checklist
+
+- [ ] Opened `milestone_4_24_array_operations.ipynb` in Jupyter
+- [ ] Ran all cells successfully
+- [ ] Performed element-wise operations (add, subtract, multiply, divide)
+- [ ] Applied scalar operations to arrays
+- [ ] Compared array and list behavior
+- [ ] Understood broadcasting concept
+- [ ] Checked shape compatibility
+- [ ] Created practical examples
+- [ ] Avoided using loops for array math
+- [ ] Recorded 2-minute walkthrough video showing:
+  - Element-wise arithmetic operations
+  - Scalar broadcasting
+  - Arrays vs lists comparison
+  - Practical example (temperature/discount/etc.)
+  - Shape compatibility check
+- [ ] Video uploaded and link ready
+- [ ] Pull Request created (if required)
+
+### Documentation
+
+For complete instructions and video script, see **[MILESTONE_4_24_QUICK_GUIDE.md](MILESTONE_4_24_QUICK_GUIDE.md)**
+
+### Status
+
+**Current Status:** ✅ Setup Complete - Ready for Testing and Video Recording
+
+**Files Created:**
+- ✅ `notebooks/milestone_4_24_array_operations.ipynb` - Complete array operations demonstration
+- ✅ `MILESTONE_4_24_QUICK_GUIDE.md` - Video script and guidelines
+
+**Next Action:** Open the notebook in Jupyter, work through all array operation examples, then record your demonstration showing element-wise operations, scalar broadcasting, and the power of vectorized computation.
