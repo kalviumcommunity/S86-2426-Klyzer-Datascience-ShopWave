@@ -1716,3 +1716,255 @@ For complete instructions and video script, see **[MILESTONE_4_24_QUICK_GUIDE.md
 - ✅ `MILESTONE_4_24_QUICK_GUIDE.md` - Video script and guidelines
 
 **Next Action:** Open the notebook in Jupyter, work through all array operation examples, then record your demonstration showing element-wise operations, scalar broadcasting, and the power of vectorized computation.
+
+---
+
+## Milestone 4.25: Applying Vectorized Operations Instead of Python Loops
+
+### Objective
+
+Master applying vectorized operations to replace Python loops, leading to cleaner, faster, and more idiomatic numerical code.
+
+### Overview
+
+Vectorization is a key mindset shift in Data Science programming. This milestone covers:
+- ✅ **Loop vs Vectorized** - Recognize and replace loop-based code
+- ✅ **Performance** - Understand 10-100x speed improvements
+- ✅ **Readability** - Write clearer, more concise code
+- ✅ **Comparisons** - Apply logic without loops
+- ✅ **Best practices** - Adopt NumPy programming style
+
+**Without vectorization, you'll write slow, verbose code that doesn't scale to large datasets.**
+
+### Learning Objectives
+
+By completing this milestone, you will:
+
+- ✅ Identify loop-based code that can be vectorized
+- ✅ Apply operations to entire arrays at once
+- ✅ Remove unnecessary for loops from numerical code
+- ✅ Write clearer and more efficient NumPy programs
+- ✅ Understand performance benefits of vectorization
+- ✅ Use vectorized comparisons and filtering
+- ✅ Recognize when vectorization is appropriate
+- ✅ Adopt best practices for numerical computing
+
+### Files Created for This Milestone
+
+1. **`notebooks/milestone_4_25_vectorized_operations.ipynb`** - Complete vectorization demonstration
+2. **`MILESTONE_4_25_QUICK_GUIDE.md`** - Video recording guide with detailed script
+
+### Quick Start
+
+**Open the notebook in Jupyter:**
+
+1. Make sure Jupyter is running
+2. Navigate to `notebooks/` folder
+3. Open `milestone_4_25_vectorized_operations.ipynb`
+4. Run all cells to see vectorization in action
+
+### Key Concepts
+
+#### Loop-Based vs Vectorized Code
+
+```python
+import numpy as np
+
+arr = np.array([1, 2, 3, 4, 5])
+
+# ❌ Loop-based (AVOID)
+result_loop = np.zeros(len(arr))
+for i in range(len(arr)):
+    result_loop[i] = arr[i] ** 2
+
+# ✅ Vectorized (PREFER)
+result_vectorized = arr ** 2
+
+# Same result, 3x less code, much faster!
+```
+
+**Key insight:** NumPy handles iteration internally - you describe the operation, not the loop.
+
+#### Performance Comparison
+
+```python
+import time
+
+large_arr = np.arange(1000000)
+
+# Loop approach
+start = time.time()
+result_loop = np.zeros(len(large_arr))
+for i in range(len(large_arr)):
+    result_loop[i] = large_arr[i] ** 2
+loop_time = time.time() - start
+
+# Vectorized approach
+start = time.time()
+result_vectorized = large_arr ** 2
+vectorized_time = time.time() - start
+
+# Speedup: typically 10-100x faster!
+```
+
+**Key insight:** Vectorization runs at C speed, not Python speed.
+
+#### Vectorized Comparisons
+
+```python
+scores = np.array([45, 67, 89, 23, 92, 78, 55])
+
+# ❌ Loop-based counting
+count_loop = 0
+for score in scores:
+    if score >= 60:
+        count_loop += 1
+
+# ✅ Vectorized counting
+count_vectorized = np.sum(scores >= 60)
+
+# ✅ Vectorized filtering
+passing_scores = scores[scores >= 60]
+# [67 89 92 78]
+```
+
+**Key insight:** Boolean operations and filtering work without explicit loops.
+
+#### Real-World Example
+
+```python
+# Temperature conversion
+celsius = np.array([0, 10, 20, 30, 100])
+
+# ❌ Loop version (verbose)
+fahrenheit_loop = np.zeros(len(celsius))
+for i in range(len(celsius)):
+    fahrenheit_loop[i] = celsius[i] * 9/5 + 32
+
+# ✅ Vectorized version (clean)
+fahrenheit = celsius * 9/5 + 32
+# [32. 50. 68. 86. 212.]
+```
+
+### Code Comparison Table
+
+| Scenario | Loop Lines | Vectorized Lines | Speedup |
+|----------|------------|------------------|---------|
+| Square elements | 3 | 1 | 10-50x |
+| Add two arrays | 3 | 1 | 20-100x |
+| Apply formula | 3 | 1 | 15-80x |
+| Filter values | 4-5 | 1 | 5-30x |
+| Count matches | 3-4 | 1 | 10-40x |
+
+### Critical Rules
+
+⚠️ **Prefer vectorization** - Always check if a loop can be replaced  
+⚠️ **Think "what" not "how"** - Describe the operation, not the iteration  
+⚠️ **No loops for math** - Element-wise operations are automatic  
+⚠️ **Use boolean indexing** - Filter without explicit loops  
+⚠️ **Performance scales** - Larger datasets show bigger gains  
+
+### What the Notebook Demonstrates
+
+**Part 1:** Why vectorization matters
+
+**Part 2:** Loop-based vs vectorized code (side-by-side)
+
+**Part 3:** Vectorized arithmetic operations
+
+**Part 4:** Vectorized comparisons and conditions
+
+**Part 5:** Avoiding common vectorization mistakes
+
+**Part 6:** Real-world vectorization examples
+
+**Part 7:** Best practices summary
+
+### Video Recording Requirements (~2 Minutes)
+
+Record a screen capture showing:
+
+1. **Loop vs Vectorized** (~35 sec)
+   - Show same operation both ways
+   - Compare code length
+   - Verify identical results
+
+2. **Performance Test** (~25 sec)
+   - Time loop approach with large array
+   - Time vectorized approach
+   - Show speedup factor
+
+3. **Vectorized Arithmetic** (~20 sec)
+   - Apply operations to entire arrays
+   - Show complex formulas
+   - No loops needed
+
+4. **Vectorized Comparisons** (~25 sec)
+   - Count matches without loops
+   - Filter values with boolean indexing
+   - Compare to loop approach
+
+5. **Real-World Example** (~20 sec)
+   - Temperature or financial calculation
+   - Show formula applied to entire array
+   - Emphasize simplicity
+
+6. **Closing** (~10 sec)
+   - Confirm understanding of vectorization
+   - Emphasize "what" vs "how" mindset
+
+### Key Points to Emphasize
+
+1. **Speed** - Vectorization is 10-100x faster than Python loops
+2. **Clarity** - Mathematical intent is obvious without loop logic
+3. **Conciseness** - One line instead of three or more
+4. **Scalability** - Performance advantage grows with data size
+5. **Idiomaticity** - Vectorization is the NumPy way
+
+### Common Mistakes to Avoid
+
+❌ Using loops for simple element-wise operations
+
+❌ Not considering vectorization before writing loops
+
+❌ Thinking vectorization is only about speed (it's also about clarity)
+
+❌ Ignoring shape compatibility
+
+❌ Using loops when boolean indexing would work
+
+❌ Optimizing prematurely instead of writing clear code first
+
+### Submission Checklist
+
+- [ ] Opened `milestone_4_25_vectorized_operations.ipynb` in Jupyter
+- [ ] Ran all cells successfully
+- [ ] Compared loop-based and vectorized approaches
+- [ ] Observed performance differences with timing
+- [ ] Practiced vectorized arithmetic operations
+- [ ] Used vectorized comparisons and filtering
+- [ ] Understood boolean indexing
+- [ ] Avoided unnecessary loops in examples
+- [ ] Recognized when vectorization is appropriate
+- [ ] Recorded 2-minute walkthrough video showing:
+  - Loop vs vectorized code comparison
+  - Performance timing test
+  - Vectorized arithmetic examples
+  - Vectorized comparisons/filtering
+  - Real-world application
+- [ ] Video uploaded and link ready
+- [ ] Pull Request created (if required)
+
+### Documentation
+
+For complete instructions and video script, see **[MILESTONE_4_25_QUICK_GUIDE.md](MILESTONE_4_25_QUICK_GUIDE.md)**
+
+### Status
+
+**Current Status:** ✅ Setup Complete - Ready for Testing and Video Recording
+
+**Files Created:**
+- ✅ `notebooks/milestone_4_25_vectorized_operations.ipynb` - Complete vectorization demonstration
+- ✅ `MILESTONE_4_25_QUICK_GUIDE.md` - Video script and guidelines
+
+**Next Action:** Open the notebook in Jupyter, work through all vectorization examples comparing loop and vectorized approaches, then record your demonstration showing how vectorization makes code faster and cleaner.
