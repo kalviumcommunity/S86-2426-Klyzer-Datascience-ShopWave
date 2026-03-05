@@ -1968,3 +1968,259 @@ For complete instructions and video script, see **[MILESTONE_4_25_QUICK_GUIDE.md
 - ✅ `MILESTONE_4_25_QUICK_GUIDE.md` - Video script and guidelines
 
 **Next Action:** Open the notebook in Jupyter, work through all vectorization examples comparing loop and vectorized approaches, then record your demonstration showing how vectorization makes code faster and cleaner.
+
+---
+
+## Milestone 4.26: Understanding NumPy Broadcasting with Simple Examples
+
+**Objective:** Understand how NumPy broadcasting works and apply it to combine arrays of different shapes without explicit loops.
+
+**Notebook:** `notebooks/milestone_4_26_broadcasting.ipynb`
+
+**Quick Guide:** [MILESTONE_4_26_QUICK_GUIDE.md](MILESTONE_4_26_QUICK_GUIDE.md)
+
+### Overview
+
+Broadcasting allows NumPy to perform operations on arrays of different shapes without explicit loops or data copying, making code shorter, faster, and more expressive.
+
+**Key Concept:** Think of broadcasting as NumPy's way of **stretching data logically**, not copying it.
+
+### Learning Objectives
+
+By completing this milestone, you will be able to:
+
+1. ✅ **Explain** how NumPy broadcasts arrays of different shapes
+2. ✅ **Apply** scalar-to-array and array-to-array broadcasting
+3. ✅ **Perform** operations without writing loops
+4. ✅ **Anticipate** output shapes correctly
+5. ✅ **Debug** common broadcasting errors
+6. ✅ **Understand** shape alignment rules (right to left)
+7. ✅ **Recognize** when broadcasting succeeds or fails
+8. ✅ **Use** broadcasting for real-world data operations
+
+### Key Concepts with Code Examples
+
+#### 1. Broadcasting with Scalars
+
+The simplest form - scalar values apply to every element:
+
+```python
+arr = np.array([1, 2, 3, 4, 5])
+result = arr + 10
+# Result: [11, 12, 13, 14, 15]
+# The scalar 10 is broadcast to all elements
+```
+
+**Why it works:** Scalars have shape `()` and can broadcast to **any shape** without copying data.
+
+#### 2. Broadcasting Between 1D Arrays
+
+Row and column vectors create 2D results:
+
+```python
+row = np.array([1, 2, 3])        # Shape: (3,)
+col = np.array([[10],             # Shape: (3, 1)
+                [20],
+                [30]])
+
+result = row + col                 # Shape: (3, 3)
+# Result: [[11, 12, 13],
+#          [21, 22, 23],
+#          [31, 32, 33]]
+```
+
+**Why it works:** NumPy aligns shapes from **right to left**. The `(3,)` becomes `(1, 3)` conceptually, then broadcasts with `(3, 1)` to create `(3, 3)`.
+
+#### 3. Broadcasting Between 2D and 1D Arrays
+
+Common pattern for row-wise or column-wise operations:
+
+```python
+# 3×3 matrix
+matrix = np.array([[1, 2, 3],
+                   [4, 5, 6],
+                   [7, 8, 9]])
+
+# Row broadcasting (add to each row)
+row_vector = np.array([10, 20, 30])
+result = matrix + row_vector  # Shape: (3, 3)
+# Each row gets [10, 20, 30] added
+
+# Column broadcasting (add to each column)
+col_vector = np.array([[100], [200], [300]])  # Must be (3, 1)
+result = matrix + col_vector  # Shape: (3, 3)
+# Each column gets column values added
+```
+
+#### 4. Broadcasting Rules (Conceptual)
+
+**Three Simple Rules:**
+
+1. **Compare shapes from right to left**
+2. **Dimensions must match OR be 1**
+3. **Missing dimensions are treated as 1**
+
+**Examples:**
+
+| Array 1 | Array 2 | Compatible? | Result Shape | Why? |
+|---------|---------|-------------|--------------|------|
+| `(3, 4)` | `(4,)` | ✅ Yes | `(3, 4)` | `(4,)` → `(1, 4)`, broadcasts across rows |
+| `(3, 4)` | `(3, 1)` | ✅ Yes | `(3, 4)` | `(3, 1)` broadcasts across columns |
+| `(5, 1)` | `(1, 6)` | ✅ Yes | `(5, 6)` | Both dimensions broadcast |
+| `(3, 4)` | `(3,)` | ❌ No | Error | `(3,)` → `(1, 3)`, 4 ≠ 3 incompatible |
+| `(3, 4)` | `(2, 4)` | ❌ No | Error | 3 ≠ 2 on first dimension |
+
+#### Visual Example: Shape Alignment
+
+```
+matrix:      (3, 4)
+row:            (4,)  →  (1, 4)  →  (3, 4)  ✓ Compatible
+result:      (3, 4)
+
+matrix:      (3, 4)
+column:      (3, 1)  →  (3, 1)  →  (3, 4)  ✓ Compatible
+result:      (3, 4)
+
+matrix:      (3, 4)
+wrong:          (3,)  →  (1, 3)  →  ???     ✗ Incompatible (4 ≠ 3)
+```
+
+### Why Broadcasting Matters
+
+**Common beginner issues broadcasting solves:**
+
+- ❌ Shape mismatch errors during array operations
+- ❌ Writing loops to handle size differences
+- ❌ Confusion about why an operation "just works"
+- ❌ Unexpected results from implicit expansion
+
+**Benefits of understanding broadcasting:**
+
+- ✅ Write concise, readable code
+- ✅ Memory efficient (no data copying)
+- ✅ Safely combine arrays of different sizes
+- ✅ Prepared for real-world data operations
+- ✅ Faster code execution (no Python loops)
+
+### Notebook Structure
+
+**Part 1:** Broadcasting with Scalars
+- Scalar operations on 1D and 2D arrays
+- Understanding conceptual stretching
+- No data copying
+
+**Part 2:** Broadcasting Between 1D Arrays
+- Same length arrays (no broadcasting needed)
+- Row + Column vector (creates 2D result)
+- Incompatible shapes demonstration
+
+**Part 3:** Broadcasting Between 2D and 1D Arrays
+- Row broadcasting (across rows)
+- Column broadcasting (across columns)
+- Real-world example: Normalizing data
+
+**Part 4:** Understanding Broadcasting Rules
+- Shape alignment from right to left
+- Compatible dimension rules
+- Missing dimensions treated as 1
+- Compatibility tests
+
+**Part 5:** Common Broadcasting Mistakes
+- Forgetting to check shapes
+- Wrong axis for broadcasting
+- Assuming automatic reshaping
+- Confusing with element-wise operations
+
+**Part 6:** Real-World Examples
+- Applying different weights to features
+- Standardizing data (Z-score normalization)
+- Temperature conversion for multiple cities
+
+**Part 7:** Summary and Best Practices
+
+### Video Recording Requirements (~2 Minutes)
+
+Record a screen capture showing:
+
+1. **Scalar Broadcasting** (~30 sec)
+   - Show scalar-to-array operation
+   - Print shapes before and after
+   - Explain no data copying occurs
+
+2. **1D to 2D Broadcasting** (~40 sec)
+   - Combine 2D matrix with 1D row vector
+   - Show shapes: (3, 3) + (3,) → (3, 3)
+   - Explain right-to-left shape alignment
+   - Display actual result
+
+3. **Column Broadcasting** (~25 sec)
+   - Show column vector shape (3, 1)
+   - Demonstrate column-wise broadcasting
+   - Show result and explain behavior
+
+4. **Broadcasting Rules** (~15 sec)
+   - Explain "dimensions must match or be 1"
+   - Show one compatible and one incompatible example
+   - Emphasize shape checking
+
+5. **Closing** (~10 sec)
+   - Confirm understanding of broadcasting
+   - Mention memory efficiency
+   - "Think stretch, not copy"
+
+### Key Points to Emphasize
+
+1. **No Data Copying** - Broadcasting is memory efficient, data is logically stretched
+2. **Shape Alignment** - NumPy compares dimensions from right to left
+3. **Compatibility Rule** - Dimensions must match or one must be 1
+4. **Automatic Expansion** - Missing dimensions treated as 1
+5. **Practical Benefit** - No loops needed for different-shaped arrays
+
+### Common Mistakes to Avoid
+
+❌ Not checking shapes before operations
+
+❌ Assuming NumPy will reshape arrays automatically
+
+❌ Forgetting that `(3,)` and `(1, 3)` are different
+
+❌ Using wrong axis (confusing row and column broadcasting)
+
+❌ Writing loops when broadcasting works
+
+❌ Ignoring shape mismatch error messages
+
+### Submission Checklist
+
+- [ ] Opened `milestone_4_26_broadcasting.ipynb` in Jupyter
+- [ ] Ran all cells successfully
+- [ ] Practiced scalar broadcasting
+- [ ] Combined 1D arrays with different shapes
+- [ ] Applied 2D and 1D broadcasting (row and column)
+- [ ] Understood shape alignment rules (right to left)
+- [ ] Checked shapes before operations using `.shape`
+- [ ] Recognized compatible and incompatible shapes
+- [ ] Predicted output shapes correctly
+- [ ] Avoided unnecessary loops in examples
+- [ ] Recorded 2-minute walkthrough video showing:
+  - Scalar-to-array broadcasting
+  - 1D-to-2D broadcasting with shapes
+  - Shape inspection before operations
+  - Explanation of why broadcasting works
+  - At least one real result displayed
+- [ ] Video uploaded and link ready
+- [ ] Pull Request created (if required)
+
+### Documentation
+
+For complete instructions and video script, see **[MILESTONE_4_26_QUICK_GUIDE.md](MILESTONE_4_26_QUICK_GUIDE.md)**
+
+### Status
+
+**Current Status:** ✅ Setup Complete - Ready for Testing and Video Recording
+
+**Files Created:**
+- ✅ `notebooks/milestone_4_26_broadcasting.ipynb` - Complete broadcasting demonstration
+- ✅ `MILESTONE_4_26_QUICK_GUIDE.md` - Video script and guidelines
+
+**Next Action:** Open the notebook in Jupyter, work through all broadcasting examples starting with scalars, then 1D and 2D arrays, understanding shape alignment rules, then record your demonstration showing how broadcasting works with shape inspection.
