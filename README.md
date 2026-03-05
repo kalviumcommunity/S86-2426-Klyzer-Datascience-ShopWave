@@ -2224,3 +2224,325 @@ For complete instructions and video script, see **[MILESTONE_4_26_QUICK_GUIDE.md
 - ✅ `MILESTONE_4_26_QUICK_GUIDE.md` - Video script and guidelines
 
 **Next Action:** Open the notebook in Jupyter, work through all broadcasting examples starting with scalars, then 1D and 2D arrays, understanding shape alignment rules, then record your demonstration showing how broadcasting works with shape inspection.
+
+---
+
+## Milestone 4.27: Creating Pandas Series from Lists and Arrays
+
+**Objective:** Understand and create Pandas Series - the foundation for labeled data handling in Data Science workflows.
+
+**Notebook:** `notebooks/milestone_4_27_pandas_series.ipynb`
+
+**Quick Guide:** [MILESTONE_4_27_QUICK_GUIDE.md](MILESTONE_4_27_QUICK_GUIDE.md)
+
+### Overview
+
+A **Series** is Pandas' core one-dimensional data structure - like a labeled NumPy array. It serves as the foundation for working with DataFrames and real datasets.
+
+**Key Concept:** Think of a Series as **a labeled NumPy array** - adding meaning and structure to your data.
+
+### Learning Objectives
+
+By completing this milestone, you will be able to:
+
+1. ✅ **Create** Pandas Series confidently from various sources
+2. ✅ **Work with** Series values and indexes
+3. ✅ **Understand** how labels add meaning to data
+4. ✅ **Use** Series as building blocks for DataFrames
+5. ✅ **Choose** Series appropriately for 1D labeled data
+6. ✅ **Distinguish** between NumPy arrays and Pandas Series
+7. ✅ **Access** data using positional and label-based indexing
+8. ✅ **Perform** basic operations on Series
+
+### Key Concepts with Code Examples
+
+#### 1. Understanding Pandas Series
+
+A **Series** is a one-dimensional data structure with two main components:
+
+- **Index** - Labels for each value (left column)
+- **Values** - The actual data (right column)
+
+```python
+import pandas as pd
+
+# Create a Series
+series = pd.Series([10, 20, 30, 40, 50])
+print(series)
+
+# Output:
+# 0    10  ← Index 0, Value 10
+# 1    20  ← Index 1, Value 20
+# 2    30  ← Index 2, Value 30
+# 3    40  ← Index 3, Value 40
+# 4    50  ← Index 4, Value 50
+# dtype: int64
+```
+
+**Key Features:**
+- Automatic index creation (0, 1, 2...)
+- Label-aware operations
+- Integration with DataFrames
+
+#### 2. Creating a Series from Python Lists
+
+The most common way to create a Series:
+
+```python
+# From a numeric list
+scores = [85, 92, 78, 90, 88]
+scores_series = pd.Series(scores)
+print(scores_series)
+
+# From a string list
+fruits = ['Apple', 'Banana', 'Cherry']
+fruits_series = pd.Series(fruits)
+print(fruits_series)
+```
+
+**Automatic Indexing:**
+- Pandas creates a `RangeIndex` starting from 0
+- Index increments by 1 for each element
+- Similar to list indexing in Python
+
+#### 3. Creating a Series from NumPy Arrays
+
+NumPy arrays convert seamlessly to Series:
+
+```python
+import numpy as np
+
+# From NumPy array
+numpy_arr = np.array([10, 20, 30, 40, 50])
+series_from_numpy = pd.Series(numpy_arr)
+print(series_from_numpy)
+
+# Data types are preserved
+int_array = np.array([1, 2, 3])
+float_array = np.array([1.1, 2.2, 3.3])
+
+print(pd.Series(int_array).dtype)    # int64
+print(pd.Series(float_array).dtype)  # float64
+```
+
+**Bridge Between NumPy and Pandas:**
+- NumPy provides fast computation
+- Series add labels and structure
+- `.values` attribute accesses underlying NumPy array
+
+#### 4. Understanding Index and Values
+
+Access and inspect Series components:
+
+```python
+series = pd.Series([10, 20, 30, 40])
+
+# Access values (returns NumPy array)
+print(series.values)  # [10 20 30 40]
+
+# Access index
+print(series.index)   # RangeIndex(start=0, stop=4, step=1)
+```
+
+**Custom Index - Adding Meaning:**
+
+```python
+# Series with meaningful labels
+temperatures = pd.Series(
+    [22, 25, 19, 24, 21],
+    index=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+)
+print(temperatures)
+
+# Output:
+# Monday       22
+# Tuesday      25
+# Wednesday    19
+# Thursday     24
+# Friday       21
+# dtype: int64
+```
+
+**Access Methods:**
+
+```python
+# Label-based access (using index labels)
+monday_temp = temperatures['Monday']      # 22
+friday_temp = temperatures.loc['Friday']  # 21
+
+# Positional access (using integer position)
+first_temp = temperatures.iloc[0]   # 22 (Monday)
+last_temp = temperatures.iloc[-1]   # 21 (Friday)
+```
+
+#### 5. Series vs NumPy Arrays
+
+| Feature | NumPy Array | Pandas Series |
+|---------|-------------|---------------|
+| **Index/Labels** | ❌ No | ✅ Yes |
+| **Fast Math** | ✅ Yes | ✅ Yes |
+| **Statistical Methods** | ⚠️ Some | ✅ Many (mean, median, std, etc.) |
+| **Label Alignment** | ❌ No | ✅ Yes |
+| **Self-Documenting** | ❌ No | ✅ Yes (via labels) |
+| **DataFrame Integration** | ❌ No | ✅ Yes |
+
+**Example Comparison:**
+
+```python
+# NumPy Array - no labels
+numpy_temps = np.array([22, 25, 19, 24, 21])
+print(numpy_temps[0])  # 22, but what day is this?
+
+# Pandas Series - with labels
+series_temps = pd.Series(
+    [22, 25, 19, 24, 21],
+    index=['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
+)
+print(series_temps['Mon'])  # 22, clearly Monday's temp!
+```
+
+### Why Series Matter
+
+**Common beginner issues Series solve:**
+
+- ❌ Confusion about what each value represents
+- ❌ Losing track of data meaning during operations
+- ❌ Difficulty transitioning from NumPy to Pandas
+- ❌ Manual alignment of related data
+
+**Benefits:**
+
+- ✅ Data has meaningful indexing
+- ✅ Operations are label-aware
+- ✅ Easier data alignment and merging
+- ✅ Building blocks for DataFrames
+- ✅ More intuitive data handling
+
+### Notebook Structure
+
+**Part 1:** Understanding Pandas Series
+- What is a Series?
+- First Series creation
+- Series vs NumPy array comparison
+
+**Part 2:** Creating a Series from Python Lists
+- Numeric lists
+- String lists
+- Mixed types (and why to avoid)
+- Automatic index creation
+
+**Part 3:** Creating a Series from NumPy Arrays
+- From 1D arrays
+- Data type preservation
+- Integration with NumPy functions
+
+**Part 4:** Understanding Index and Values
+- Accessing values
+- Accessing index
+- Custom index creation
+- Positional vs label-based access
+
+**Part 5:** Basic Operations on Series
+- Arithmetic operations
+- Statistical methods
+- Boolean indexing (filtering)
+- Index preservation during operations
+
+**Part 6:** Comparing Series with Lists and Arrays
+- When to use each structure
+- Feature comparison
+- Conversion between types
+
+**Part 7:** Real-World Examples
+- Monthly sales data
+- Student grades
+- Converting between Series and arrays
+
+### Video Recording Requirements (~2 Minutes)
+
+Record a screen capture showing:
+
+1. **Creating Series from List** (~35 sec)
+   - Import Pandas and NumPy
+   - Create Series from Python list
+   - Show output with index and values
+   - Access `.values` and `.index`
+
+2. **Creating Series from NumPy Array** (~30 sec)
+   - Create NumPy array
+   - Convert to Series
+   - Show data type preservation
+   - Explain seamless integration
+
+3. **Custom Index Demo** (~35 sec)
+   - Create Series with meaningful labels (e.g., days of week)
+   - Show label-based access: `series['Monday']`
+   - Show positional access: `series.iloc[0]`
+   - Explain why labels matter
+
+4. **Why Series Are Useful** (~10 sec)
+   - Compare labeled vs unlabeled data
+   - Mention DataFrame building blocks
+   - Summarize: "Labels add meaning to data"
+
+5. **Closing** (~10 sec)
+   - Confirm understanding of Series structure
+   - Ready for DataFrames
+
+### Key Points to Emphasize
+
+1. **Two Components** - Every Series has index (labels) and values (data)
+2. **Labeled Data** - Index provides meaningful labels vs numeric positions
+3. **NumPy Integration** - Series built on NumPy, preserves dtypes
+4. **Building Block** - Series form DataFrame columns
+5. **Label-Aware** - Operations preserve and align by index
+6. **Access Methods** - Position (iloc) vs label (loc/bracket notation)
+
+### Common Mistakes to Avoid
+
+❌ Forgetting to import Pandas (`import pandas as pd`)
+
+❌ Confusing `.iloc` (positional) with `.loc` (label-based)
+
+❌ Creating Series from 2D data (use DataFrame instead)
+
+❌ Ignoring the index - it's not just decoration!
+
+❌ Mixing up Series and NumPy array methods
+
+❌ Using Series when a simple list or array would suffice
+
+### Submission Checklist
+
+- [ ] Opened `milestone_4_27_pandas_series.ipynb` in Jupyter
+- [ ] Imported Pandas successfully
+- [ ] Created Series from Python lists
+- [ ] Created Series from NumPy arrays
+- [ ] Inspected Series `.values` and `.index`
+- [ ] Created Series with custom index
+- [ ] Practiced label-based access (e.g., `series['label']`)
+- [ ] Practiced positional access (e.g., `series.iloc[0]`)
+- [ ] Performed basic operations (arithmetic, filtering)
+- [ ] Understood difference between Series and arrays
+- [ ] Recorded 2-minute walkthrough video showing:
+  - Creating Series from list
+  - Creating Series from NumPy array
+  - Showing Series values and index
+  - Custom index example
+  - Explaining why Series are useful
+- [ ] Video uploaded and link ready
+- [ ] Pull Request created (if required)
+
+### Documentation
+
+For complete instructions and video script, see **[MILESTONE_4_27_QUICK_GUIDE.md](MILESTONE_4_27_QUICK_GUIDE.md)**
+
+### Status
+
+**Current Status:** ✅ Setup Complete - Ready for Testing and Video Recording
+
+**Files Created:**
+- ✅ `notebooks/milestone_4_27_pandas_series.ipynb` - Complete Series creation demonstration
+- ✅ `MILESTONE_4_27_QUICK_GUIDE.md` - Video script and guidelines
+
+**Next Action:** Open the notebook in Jupyter, import Pandas, create Series from lists and arrays, explore index and values, then record your demonstration showing how Series provide labeled data structure for Pandas operations.
