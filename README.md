@@ -2546,3 +2546,384 @@ For complete instructions and video script, see **[MILESTONE_4_27_QUICK_GUIDE.md
 - ✅ `MILESTONE_4_27_QUICK_GUIDE.md` - Video script and guidelines
 
 **Next Action:** Open the notebook in Jupyter, import Pandas, create Series from lists and arrays, explore index and values, then record your demonstration showing how Series provide labeled data structure for Pandas operations.
+
+---
+
+## Milestone 4.28: Creating Pandas DataFrames from Dictionaries and Files
+
+**Objective:** Learn to create and load Pandas DataFrames - the primary structure for tabular data in Data Science workflows.
+
+**Notebook:** `notebooks/milestone_4_28_pandas_dataframes.ipynb`
+
+**Quick Guide:** [MILESTONE_4_28_QUICK_GUIDE.md](MILESTONE_4_28_QUICK_GUIDE.md)
+
+### Overview
+
+A **DataFrame** is Pandas' primary data structure for working with tabular (table-like) data - similar to spreadsheets or database tables. Most real Data Science work begins with creating or loading DataFrames correctly.
+
+**Key Concept:** Think of a DataFrame as **your working table for all analysis** - rows and columns of labeled data.
+
+### Learning Objectives
+
+By completing this milestone, you will be able to:
+
+1. ✅ **Create** DataFrames programmatically from dictionaries
+2. ✅ **Load** tabular data from files into Pandas
+3. ✅ **Inspect** rows, columns, and data types
+4. ✅ **Understand** how data is organized in a DataFrame
+5. ✅ **Prepare** data for cleaning and analysis
+6. ✅ **Distinguish** between Series and DataFrames
+7. ✅ **Verify** DataFrame structure after loading
+8. ✅ **Detect** common loading issues early
+
+### Key Concepts with Code Examples
+
+#### 1. Understanding Pandas DataFrames
+
+A **DataFrame** is a 2-dimensional labeled data structure:
+
+- **Rows** - Horizontal records (like spreadsheet rows)
+- **Columns** - Vertical fields (like spreadsheet columns)
+- **Index** - Row labels (left side, often 0, 1, 2...)
+- **Column names** - Column labels (top row headers)
+
+**Real-World Analogy:**
+- Excel/Google Sheets spreadsheet
+- SQL database table
+- CSV file when opened
+
+```python
+import pandas as pd
+
+# Simple DataFrame
+data = {
+    'Name': ['Alice', 'Bob', 'Charlie'],
+    'Age': [25, 30, 22],
+    'City': ['New York', 'Los Angeles', 'Chicago']
+}
+
+df = pd.DataFrame(data)
+print(df)
+
+# Output:
+#       Name  Age         City
+# 0    Alice   25     New York
+# 1      Bob   30  Los Angeles
+# 2  Charlie   22      Chicago
+```
+
+**Components:**
+```python
+df.columns  # Column names: ['Name', 'Age', 'City']
+df.index    # Row index: RangeIndex(start=0, stop=3, step=1)
+df.shape    # Shape: (3, 3) - 3 rows, 3 columns
+df.values   # Values as NumPy array
+```
+
+#### 2. Creating DataFrames from Dictionaries
+
+**Method 1: Column-Oriented (Dictionary with Lists)**
+
+Most common approach - keys are column names, values are lists:
+
+```python
+# Student grades
+student_data = {
+    'Student': ['Alice', 'Bob', 'Charlie', 'Diana'],
+    'Math': [85, 92, 78, 95],
+    'English': [90, 88, 85, 92],
+    'Science': [88, 90, 82, 96]
+}
+
+students_df = pd.DataFrame(student_data)
+print(students_df)
+
+# Rules:
+# - Keys → Column names
+# - Values (lists) → Column data
+# - All lists must have same length
+```
+
+**Method 2: Row-Oriented (List of Dictionaries)**
+
+Each dictionary represents a row:
+
+```python
+# Employee records
+employees = [
+    {'Name': 'John', 'Department': 'Sales', 'Salary': 50000},
+    {'Name': 'Sarah', 'Department': 'IT', 'Salary': 65000},
+    {'Name': 'Mike', 'Department': 'HR', 'Salary': 55000}
+]
+
+employees_df = pd.DataFrame(employees)
+
+# Rules:
+# - Each dict is a row
+# - Dictionary keys become column names
+# - Useful for JSON-like data
+```
+
+**With Custom Index:**
+
+```python
+temps = {
+    'Morning': [20, 22, 19],
+    'Afternoon': [28, 30, 27],
+    'Evening': [24, 26, 23]
+}
+
+temps_df = pd.DataFrame(temps, index=['Mon', 'Tue', 'Wed'])
+print(temps_df)
+
+# Output:
+#      Morning  Afternoon  Evening
+# Mon       20         28       24
+# Tue       22         30       26
+# Wed       19         27       23
+```
+
+#### 3. Loading DataFrames from Files
+
+**CSV Loading:**
+
+```python
+# Load CSV file
+df = pd.read_csv('data/raw/sample_data.csv')
+
+print(df.head())  # First 5 rows
+print(df.shape)   # (rows, columns)
+```
+
+**How it Works:**
+1. First row of CSV → Column names (header)
+2. Remaining rows → Data
+3. Automatic index creation (0, 1, 2...)
+4. Data type inference for each column
+
+**Common CSV Parameters:**
+
+```python
+# No header row in file
+df = pd.read_csv('file.csv', header=None)
+
+# Different separator (e.g., semicolon)
+df = pd.read_csv('file.csv', sep=';')
+
+# Load specific columns only
+df = pd.read_csv('file.csv', usecols=['Name', 'Age'])
+
+# Use a column as index
+df = pd.read_csv('file.csv', index_col='ID')
+
+# Skip rows
+df = pd.read_csv('file.csv', skiprows=2)
+```
+
+#### 4. Inspecting DataFrame Structure
+
+**Always inspect data after loading to catch issues early!**
+
+**Method 1: `.head()` and `.tail()`**
+
+```python
+df.head()      # First 5 rows (default)
+df.head(10)    # First 10 rows
+df.tail()      # Last 5 rows
+```
+
+**Method 2: `.info()`**
+
+```python
+df.info()
+
+# Shows:
+# - Number of rows and columns
+# - Column names
+# - Non-null counts (detect missing data)
+# - Data types (int64, float64, object, etc.)
+# - Memory usage
+```
+
+**Method 3: `.describe()`**
+
+```python
+df.describe()
+
+# Statistical summary for numeric columns:
+# - count: Non-null values
+# - mean: Average
+# - std: Standard deviation
+# - min/max: Range
+# - 25%, 50%, 75%: Quartiles
+```
+
+**Method 4: Shape, Columns, Index**
+
+```python
+df.shape       # (rows, columns) tuple
+df.columns     # Column names
+df.index       # Row index
+df.dtypes      # Data type of each column
+df.size        # Total number of cells
+```
+
+**Method 5: Missing Data Check**
+
+```python
+df.isnull()              # Boolean DataFrame (True = missing)
+df.isnull().sum()        # Count nulls per column
+df.isnull().sum().sum()  # Total null count
+```
+
+### Why DataFrames Matter
+
+**Common beginner issues DataFrames solve:**
+
+- ❌ Difficulty loading external data into Python
+- ❌ Confusion between Series and DataFrames
+- ❌ Incorrect assumptions about data shape
+- ❌ Errors from unexpected file formats
+- ❌ Silent data loading failures
+
+**Benefits:**
+
+- ✅ Bring external data into Python confidently
+- ✅ Data structured correctly from the start
+- ✅ Natural tabular data representation
+- ✅ Powerful row and column operations
+- ✅ Integration with files, databases, APIs
+- ✅ Foundation for all Pandas analysis
+
+### Notebook Structure
+
+**Part 1:** Understanding Pandas DataFrames
+- What is a DataFrame?
+- First DataFrame creation
+- Components: index, columns, values
+- DataFrame vs Series comparison
+
+**Part 2:** Creating DataFrames from Dictionaries
+- Column-oriented (dict with lists)
+- Row-oriented (list of dicts)
+- Custom index creation
+- Real-world examples (products, temperatures)
+
+**Part 3:** Loading DataFrames from Files
+- CSV loading with `pd.read_csv()`
+- How CSV parsing works
+- Creating and saving CSV files
+- Common loading parameters
+
+**Part 4:** Inspecting DataFrame Structure
+- `.head()` and `.tail()` 
+- `.info()` for comprehensive overview
+- `.describe()` for statistics
+- Shape, columns, index inspection
+- Missing data detection
+
+**Part 5:** Accessing Data in DataFrames
+- Selecting columns
+- Selecting rows (iloc vs loc)
+- Selecting specific cells
+- Boolean filtering
+
+**Part 6:** Real-World Examples
+- Monthly sales report
+- Student performance analysis
+- Inventory management
+
+### Video Recording Requirements (~2 Minutes)
+
+Record a screen capture showing:
+
+1. **Creating DataFrame from Dictionary** (~40 sec)
+   - Import Pandas
+   - Create dictionary with column data
+   - Convert to DataFrame with `pd.DataFrame()`
+   - Show output with index, columns, data
+   - Display `.shape` and `.columns`
+
+2. **Loading DataFrame from CSV** (~40 sec)
+   - Use `pd.read_csv()` with file path
+   - Show loaded DataFrame
+   - Demonstrate `.head()` to preview
+   - Show `.info()` for structure check
+
+3. **Inspecting Structure** (~25 sec)
+   - Show `.shape` (rows, columns)
+   - Display column names with `.columns`
+   - Use `.describe()` for statistics
+   - Emphasize "always inspect after loading"
+
+4. **Why DataFrames Matter** (~5 sec)
+   - Mention tabular data structure
+   - Primary tool for data analysis
+   - Closing
+
+5. **Wrap-up** (~10 sec)
+   - Confirm understanding
+   - "DataFrames are the working table for analysis"
+
+### Key Points to Emphasize
+
+1. **2D Structure** - DataFrames are rows and columns (like spreadsheets)
+2. **From Dictionary** - Keys = columns, values = data
+3. **From CSV** - `pd.read_csv()` for file loading
+4. **Always Inspect** - Use `.head()`, `.info()`, `.describe()`
+5. **Column = Series** - Each column is a separate Series
+6. **Mixed Types** - Different columns can have different dtypes
+7. **Index Matters** - Row labels for data alignment
+8. **Foundation** - 90% of data analysis uses DataFrames
+
+### Common Mistakes to Avoid
+
+❌ Not inspecting data after loading - silent errors are worst
+
+❌ Assuming column names are correct - always check `.columns`
+
+❌ Wrong file paths - use relative or absolute paths correctly
+
+❌ Forgetting that columns are Series - each column is 1D
+
+❌ Mixing up `.iloc` (position) and `.loc` (label)
+
+❌ Skipping `.info()` - missing data goes unnoticed
+
+❌ Not checking `.shape` - working with unexpected dimensions
+
+### Submission Checklist
+
+- [ ] Opened `milestone_4_28_pandas_dataframes.ipynb` in Jupyter
+- [ ] Imported Pandas successfully
+- [ ] Created DataFrame from Python dictionary
+- [ ] Loaded DataFrame from CSV file
+- [ ] Inspected structure with `.head()`, `.info()`, `.describe()`
+- [ ] Checked shape and column names
+- [ ] Selected columns and rows
+- [ ] Performed basic filtering
+- [ ] Detected missing data with `.isnull()`
+- [ ] Understood DataFrame vs Series difference
+- [ ] Recorded 2-minute walkthrough video showing:
+  - Creating DataFrame from dictionary
+  - Loading DataFrame from file  
+  - Inspecting rows and columns
+  - Explaining why DataFrames are useful
+  - At least one inspection method demonstrated
+- [ ] Video uploaded and link ready
+- [ ] Pull Request created (if required)
+
+### Documentation
+
+For complete instructions and video script, see **[MILESTONE_4_28_QUICK_GUIDE.md](MILESTONE_4_28_QUICK_GUIDE.md)**
+
+### Status
+
+**Current Status:** ✅ Setup Complete - Ready for Testing and Video Recording
+
+**Files Created:**
+- ✅ `notebooks/milestone_4_28_pandas_dataframes.ipynb` - Complete DataFrame creation and loading demonstration
+- ✅ `MILESTONE_4_28_QUICK_GUIDE.md` - Video script and guidelines
+- ✅ `data/raw/sample_data.csv` - Sample CSV file for practice
+
+**Next Action:** Open the notebook in Jupyter, import Pandas, create DataFrames from dictionaries, load from CSV files, inspect structure with .head() and .info(), then record your demonstration showing how DataFrames organize tabular data for analysis.
