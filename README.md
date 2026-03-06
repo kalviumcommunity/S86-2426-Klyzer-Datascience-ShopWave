@@ -2927,3 +2927,412 @@ For complete instructions and video script, see **[MILESTONE_4_28_QUICK_GUIDE.md
 - ✅ `data/raw/sample_data.csv` - Sample CSV file for practice
 
 **Next Action:** Open the notebook in Jupyter, import Pandas, create DataFrames from dictionaries, load from CSV files, inspect structure with .head() and .info(), then record your demonstration showing how DataFrames organize tabular data for analysis.
+
+---
+
+## Milestone 4.29: Loading CSV Data into Pandas DataFrames
+
+**Objective:** Master the critical skill of loading CSV files correctly into Pandas—the foundation of all data analysis workflows.
+
+**Notebook:** `notebooks/milestone_4_29_loading_csv_data.ipynb`
+
+**Quick Guide:** [MILESTONE_4_29_QUICK_GUIDE.md](MILESTONE_4_29_QUICK_GUIDE.md)
+
+### Overview
+
+**CSV (Comma-Separated Values)** files are the most common format for sharing tabular data in Data Science. Almost every data project begins with loading a CSV file. Loading data correctly prevents silent errors and ensures analysis starts on a solid foundation.
+
+**Key Concept:** CSV loading is like opening a book—always check you opened the right book before reading.
+
+### Learning Objectives
+
+By completing this milestone, you will be able to:
+
+1. ✅ **Understand** what CSV files represent and their structure
+2. ✅ **Load** CSV files into Pandas DataFrames using `pd.read_csv()`
+3. ✅ **Inspect** loaded data immediately to verify correctness
+4. ✅ **Interpret** headers, rows, and columns correctly
+5. ✅ **Recognize** common CSV loading issues (wrong delimiter, no header)
+6. ✅ **Fix** loading problems with appropriate parameters
+7. ✅ **Verify** column names, row counts, and data types
+8. ✅ **Detect** missing values and unexpected data early
+
+### Why This Matters
+
+**Common beginner mistakes:**
+- ❌ Assuming data loaded correctly without inspection
+- ❌ Using wrong delimiter (comma vs semicolon)
+- ❌ Missing the header row issue
+- ❌ Not checking for missing data
+- ❌ Incorrect column names after loading
+- ❌ Data shifted into wrong columns
+
+**Critical insight:** Most downstream analysis problems begin at data loading. Get this step right, and your analysis becomes reliable.
+
+**Benefits of proper CSV loading:**
+- ✅ Data structured correctly from the start
+- ✅ Errors caught immediately, not hours later
+- ✅ Column names and types verified
+- ✅ Missing data detected early
+- ✅ Confident foundation for analysis
+
+### Key Concepts with Code Examples
+
+#### 1. Understanding CSV File Structure
+
+**CSV = Comma-Separated Values**
+
+A plain text file where:
+- Each **line** = one **row**
+- Values separated by **delimiter** (usually comma `,`)
+- **First row** = column names (header)
+- **Remaining rows** = data
+
+**Example CSV structure:**
+```
+Product,Price,Stock,Category        ← Header row
+Laptop,999.99,15,Electronics        ← Data row 1
+Mouse,29.99,150,Electronics         ← Data row 2
+Keyboard,79.99,80,Electronics       ← Data row 3
+```
+
+**Interpretation:**
+- 4 columns: Product, Price, Stock, Category
+- 3 data rows (after header)
+- Comma delimiter
+- Structure: 3 rows × 4 columns
+
+#### 2. Loading a Standard CSV File
+
+**The core function:** `pd.read_csv()`
+
+```python
+import pandas as pd
+
+# Load CSV file
+df = pd.read_csv('../data/raw/products.csv')
+
+print("✓ CSV loaded successfully!")
+print(df)
+```
+
+**Output:**
+```
+     Product   Price  Stock     Category
+0     Laptop  999.99     15  Electronics
+1      Mouse   29.99    150  Electronics
+2   Keyboard   79.99     80  Electronics
+3    Monitor  299.99     25  Electronics
+4  Headphones 149.99     60  Electronics
+```
+
+**What happened:**
+1. Pandas opened the file
+2. First row → Column names
+3. Remaining rows → Data with index 0, 1, 2...
+4. Data types inferred automatically
+
+#### 3. Inspecting Loaded Data (CRITICAL STEP!)
+
+**Golden Rule:** ALWAYS inspect data immediately after loading!
+
+**Essential inspection methods:**
+
+```python
+# 1. Check dimensions
+print(f"Shape: {df.shape}")  
+# Output: (5, 4) - 5 rows, 4 columns
+
+# 2. Check column names
+print(f"Columns: {df.columns.tolist()}")
+# Output: ['Product', 'Price', 'Stock', 'Category']
+
+# 3. Preview first rows
+print(df.head(3))
+
+# 4. Comprehensive overview (MOST IMPORTANT!)
+df.info()
+# Shows: row count, column names, data types, null counts
+
+# 5. Check for missing values
+print(df.isnull().sum())
+
+# 6. Statistical summary
+print(df.describe())
+```
+
+**Why inspect?**
+- Verify correct file loaded
+- Confirm column names match expectations
+- Check data types are appropriate
+- Detect missing values early
+- Catch loading errors before analysis
+
+#### 4. Common Loading Issues and Solutions
+
+**Issue 1: Wrong Delimiter**
+
+**Problem:** File uses semicolons (`;`) instead of commas
+
+```python
+# INCORRECT (using default comma)
+df = pd.read_csv('sales_semicolon.csv')
+print(df.columns.tolist())
+# Output: ['Date;Product;Quantity;Revenue']  ← All in ONE column!
+
+# CORRECT (specify semicolon)
+df = pd.read_csv('sales_semicolon.csv', sep=';')
+print(df.columns.tolist())
+# Output: ['Date', 'Product', 'Quantity', 'Revenue']  ← Properly separated!
+```
+
+**Solution:** Use `sep=';'` parameter
+
+**How to detect:**
+- Only 1 column after loading
+- Column name contains semicolons or other delimiter
+- Values look like "value1;value2;value3"
+
+**Issue 2: No Header Row**
+
+**Problem:** CSV has no column names—all rows are data
+
+```python
+# INCORRECT (Pandas assumes first row is header)
+df = pd.read_csv('data_no_header.csv')
+print(df.columns.tolist())
+# Output: ['John', 'Engineering', '75000']  ← First data row became columns!
+
+# CORRECT (specify no header + custom names)
+df = pd.read_csv(
+    'data_no_header.csv',
+    header=None,
+    names=['Name', 'Department', 'Salary']
+)
+print(df.columns.tolist())
+# Output: ['Name', 'Department', 'Salary']  ← Custom names applied!
+```
+
+**Solution:** Use `header=None` and `names=[...]` parameters
+
+**How to detect:**
+- Column names look like data values
+- One less row than expected
+- First data row missing
+
+**Issue 3: File Not Found**
+
+**Problem:** Incorrect file path
+
+```python
+# FAILS with FileNotFoundError
+df = pd.read_csv('nonexistent.csv')
+
+# FIX: Use correct relative path
+df = pd.read_csv('../data/raw/products.csv')
+```
+
+**Issue 4: Extra Whitespace in Column Names**
+
+**Problem:** Column names have leading/trailing spaces
+
+```python
+# Columns: [' Product ', ' Price ', ' Stock ']
+# Cannot access with: df['Price']  ← Fails!
+
+# Fix: Strip whitespace
+df.columns = df.columns.str.strip()
+# Now: ['Product', 'Price', 'Stock']
+# Can access: df['Price']  ← Works!
+```
+
+#### 5. Complete Inspection Workflow
+
+**Recommended inspection sequence for ANY CSV:**
+
+```python
+# 1. Load
+df = pd.read_csv('file.csv')
+
+# 2. Immediate inspection (NEVER SKIP!)
+print("=" * 60)
+print("DATA INSPECTION")
+print("=" * 60)
+
+print(f"\n1. SHAPE: {df.shape[0]} rows × {df.shape[1]} columns")
+print(f"2. COLUMNS: {df.columns.tolist()}")
+
+print("\n3. PREVIEW:")
+print(df.head(3))
+
+print("\n4. DATA TYPES & NULLS:")
+df.info()
+
+print("\n5. MISSING VALUES:")
+print(df.isnull().sum())
+
+print("\n6. STATISTICS:")
+print(df.describe())
+
+print("\n" + "=" * 60)
+print("✓ INSPECTION COMPLETE")
+print("=" * 60)
+```
+
+### Why CSV Loading is Critical
+
+**Think of it this way:**
+- You wouldn't start cooking without checking ingredients
+- You wouldn't drive without checking fuel and tires
+- **Don't analyze data without checking what loaded**
+
+**Reality:**
+- 90% of data analysis problems start with incorrect loading
+- Silent errors at loading cascade through entire analysis
+- Hours of debugging often trace back to wrong delimiter or missing header
+
+**Master CSV loading = Reliable analysis foundation**
+
+### Notebook Structure
+
+**Part 1:** Understanding CSV Files
+- What is a CSV file?
+- CSV structure and components
+- CSV vs spreadsheet comparison
+- Delimiters and headers
+
+**Part 2:** Loading CSV Files into Pandas
+- Using `pd.read_csv()`
+- File paths (relative vs absolute)
+- Standard CSV loading examples
+- What happens during loading
+
+**Part 3:** Inspecting Loaded Data
+- `.head()` and `.tail()` - preview rows
+- `.info()` - comprehensive overview
+- `.shape` - dimensions
+- `.columns` - column names
+- `.describe()` - statistical summary
+- `.isnull().sum()` - missing data check
+- Complete inspection workflow
+
+**Part 4:** Recognizing Common Loading Issues
+- Wrong delimiter (semicolon, tab)
+- No header row
+- File not found errors
+- Extra whitespace in column names
+- Incorrect data types
+- Summary of issues and fixes
+
+**Part 5:** Real-World Loading Examples
+- Standard CSV with inspection
+- CSV with different delimiter
+- CSV without header
+- Best practices workflow
+
+**Part 6:** Best Practices for CSV Loading
+- CSV loading checklist
+- Essential parameters reference
+- Loading large files
+- Prevention strategies
+
+### Video Recording Requirements (~2 Minutes)
+
+Record a screen capture demonstrating CSV loading and inspection.
+
+Your video must include:
+
+1. **Loading a CSV File** (~30 sec)
+   - Import Pandas
+   - Use `pd.read_csv()` with file path
+   - Display the loaded DataFrame
+   - Explain how rows and columns are interpreted
+
+2. **Inspecting the Data** (~30 sec)
+   - Show `.shape` to check dimensions
+   - Show `.columns` to verify column names
+   - Use `.info()` for comprehensive check
+   - Check for missing values with `.isnull().sum()`
+
+3. **Demonstrating a Loading Issue** (~35 sec)
+   - Show a common problem (e.g., wrong delimiter or no header)
+   - Display the incorrect result
+   - Fix with appropriate parameter (`sep=';'` or `header=None`)
+   - Show the corrected result
+
+4. **Why This Matters** (~15 sec)
+   - Emphasize that inspection prevents errors
+   - "CSV loading is the foundation of data analysis"
+   - "Always inspect immediately after loading"
+
+5. **Wrap-up** (~10 sec)
+   - Confirm understanding of CSV loading
+   - Mention the importance of getting it right from the start
+
+### Key Points to Emphasize
+
+1. **CSV = Standard Format** - Most common way to share data
+2. **Load with pd.read_csv()** - Primary function for CSV loading
+3. **ALWAYS Inspect** - Use `.info()`, `.head()`, `.shape` immediately
+4. **Common Issues Exist** - Wrong delimiter, no header, file paths
+5. **Inspection Catches Errors** - Early detection saves hours of debugging
+6. **Foundation of Analysis** - All analysis begins with correct loading
+7. **File Paths Matter** - Use relative paths for portability
+8. **Missing Data Detection** - Check with `.isnull().sum()` early
+
+### Common Mistakes to Avoid
+
+❌ Not inspecting data after loading - silent errors are the worst
+
+❌ Assuming file loaded correctly - always verify with `.info()`
+
+❌ Using default parameters blindly - check delimiter and header
+
+❌ Ignoring column name issues - spaces and typos cause errors
+
+❌ Skipping missing data check - NaN values break operations
+
+❌ Not checking data types - 'object' when expecting numeric
+
+❌ Using absolute paths - breaks portability across machines
+
+❌ Analyzing without verification - bad data → bad analysis
+
+### Submission Checklist
+
+- [ ] Opened `milestone_4_29_loading_csv_data.ipynb` in Jupyter
+- [ ] Imported Pandas successfully
+- [ ] Loaded at least one CSV file with `pd.read_csv()`
+- [ ] Displayed the loaded DataFrame
+- [ ] Checked shape with `.shape`
+- [ ] Verified column names with `.columns`
+- [ ] Used `.info()` for comprehensive overview
+- [ ] Checked for missing values with `.isnull().sum()`
+- [ ] Understood what CSV files represent
+- [ ] Identified at least one loading issue (wrong delimiter or no header)
+- [ ] Fixed the loading issue with appropriate parameter
+- [ ] Explained why inspection is critical
+- [ ] Recorded 2-minute walkthrough video showing:
+  - Loading a CSV file successfully
+  - Inspecting with shape, columns, info
+  - Demonstrating and fixing one loading issue
+  - Explaining why correct loading matters
+- [ ] Video uploaded and link ready
+- [ ] Pull Request created (if required)
+
+### Documentation
+
+For complete instructions and video script, see **[MILESTONE_4_29_QUICK_GUIDE.md](MILESTONE_4_29_QUICK_GUIDE.md)**
+
+### Status
+
+**Current Status:** ✅ Setup Complete - Ready for Testing and Video Recording
+
+**Files Created:**
+- ✅ `notebooks/milestone_4_29_loading_csv_data.ipynb` - Comprehensive CSV loading and inspection demonstration
+- ✅ `MILESTONE_4_29_QUICK_GUIDE.md` - Video script and guidelines
+- ✅ `data/raw/products.csv` - Standard CSV file for practice
+- ✅ `data/raw/sales_semicolon.csv` - Semicolon-delimited CSV for demonstrating delimiter issues
+- ✅ `data/raw/data_no_header.csv` - CSV without header for demonstrating header issues
+
+**Next Action:** Open the notebook in Jupyter, import Pandas, load CSV files with pd.read_csv(), inspect data with .info() and .head(), demonstrate and fix common loading issues (wrong delimiter, no header), then record your demonstration showing why proper CSV loading and inspection are the foundation of reliable data analysis.
