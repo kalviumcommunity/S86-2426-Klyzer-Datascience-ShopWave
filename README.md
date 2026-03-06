@@ -3336,3 +3336,419 @@ For complete instructions and video script, see **[MILESTONE_4_29_QUICK_GUIDE.md
 - ✅ `data/raw/data_no_header.csv` - CSV without header for demonstrating header issues
 
 **Next Action:** Open the notebook in Jupyter, import Pandas, load CSV files with pd.read_csv(), inspect data with .info() and .head(), demonstrate and fix common loading issues (wrong delimiter, no header), then record your demonstration showing why proper CSV loading and inspection are the foundation of reliable data analysis.
+
+---
+
+## Milestone 4.30: Inspecting DataFrames Using head(), info(), and describe()
+
+**Objective:** Master the three essential DataFrame inspection methods that every Data Scientist uses before analyzing data.
+
+**Notebook:** `notebooks/milestone_4_30_inspecting_dataframes.ipynb`
+
+**Quick Guide:** [MILESTONE_4_30_QUICK_GUIDE.md](MILESTONE_4_30_QUICK_GUIDE.md)
+
+### Overview
+
+After loading data, **inspection is the most important step** to understand structure, data types, and overall data quality before any cleaning or analysis. These three methods give you a fast, reliable snapshot of what your data actually looks like.
+
+**Key Concept:** You can't analyze data you don't understand—inspection comes first, analysis comes second.
+
+### Learning Objectives
+
+By completing this milestone, you will be able to:
+
+1. ✅ **Preview** DataFrame contents quickly with `head()`
+2. ✅ **Understand** column names and sample values
+3. ✅ **Inspect** structure and data types with `info()`
+4. ✅ **Detect** missing values and null counts
+5. ✅ **Summarize** numeric data with `describe()`
+6. ✅ **Interpret** statistics (mean, median, quartiles)
+7. ✅ **Build habits** of inspecting data before analysis
+8. ✅ **Recognize** data quality issues early
+
+### Why This Matters
+
+**Common beginner mistakes:**
+- ❌ Starting analysis without understanding the data
+- ❌ Missing hidden null values that break operations
+- ❌ Misinterpreting column data types
+- ❌ Drawing conclusions from incomplete inspection
+- ❌ Assuming data is correct without verification
+
+**Critical insight:** Most analysis mistakes start with poor inspection. Spending 30 seconds on inspection saves hours of debugging.
+
+**Benefits of proper inspection:**
+- ✅ Understand dataset before working on it
+- ✅ Structural issues caught early
+- ✅ Data cleaning decisions are informed
+- ✅ Analysis results are more reliable
+- ✅ Confidence in your data
+
+### Key Concepts with Code Examples
+
+#### 1. Inspecting Data with head()
+
+**Purpose:** Preview the **first few rows** to see what data looks like
+
+**Basic Usage:**
+```python
+import pandas as pd
+
+# Load data
+df = pd.read_csv('../data/raw/employees.csv')
+
+# Default: first 5 rows
+print(df.head())
+```
+
+**Output:**
+```
+   EmployeeID           Name   Department  Salary  YearsExperience         City
+0         101  Alice Johnson  Engineering   95000                5     New York
+1         102      Bob Smith    Marketing   72000                3  Los Angeles
+2         103  Charlie Brown        Sales   68000                2      Chicago
+3         104   Diana Prince  Engineering  110000                8 San Francisco
+4         105     Eve Davis           HR   65000                4       Boston
+```
+
+**What to observe:**
+- ✅ Column names at the top
+- ✅ Index on the left (0, 1, 2, 3, 4)
+- ✅ Actual data values
+- ✅ Data types (numeric vs text)
+- ✅ Any obvious issues (duplicates, NaN, weird values)
+
+**Custom row counts:**
+```python
+df.head(3)   # First 3 rows
+df.head(10)  # First 10 rows
+df.tail(3)   # Last 3 rows
+```
+
+**When to use:**
+- Quick visual confirmation data loaded correctly
+- See actual values, not just statistics
+- Check column names are as expected
+- Verify data alignment (values in correct columns)
+
+#### 2. Inspecting Structure with info()
+
+**Purpose:** Get a **comprehensive overview** of DataFrame structure
+
+**⭐ THIS IS THE MOST IMPORTANT INSPECTION METHOD! ⭐**
+
+**Basic Usage:**
+```python
+df.info()
+```
+
+**Output:**
+```
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 10 entries, 0 to 9              ← 10 rows total
+Data columns (total 6 columns):             ← 6 columns total
+ #   Column            Non-Null Count  Dtype   
+---  ------            --------------  -----   
+ 0   EmployeeID        10 non-null     int64   ← All 10 rows have values
+ 1   Name              10 non-null     object  ← Text data
+ 2   Department        10 non-null     object  
+ 3   Salary            10 non-null     int64   ← Numeric
+ 4   YearsExperience   10 non-null     int64   
+ 5   City              10 non-null     object  
+dtypes: int64(3), object(3)
+memory usage: 612.0+ bytes
+```
+
+**What info() tells you:**
+- **Number of rows and columns** - Verify expected dimensions
+- **Column names** - Confirm correct names
+- **Data types** - int64 (integer), float64 (decimal), object (text)
+- **Non-null counts** - Detect missing data (if count < total rows)
+- **Memory usage** - Understand dataset size
+
+**Critical for detecting missing data:**
+```python
+# If you see this:
+# CustomerCity   8 non-null  ← Only 8 values out of 10 rows!
+
+# This means 2 rows have missing data - MUST handle before analysis!
+```
+
+**Common Data Types:**
+| dtype | Meaning | Example |
+|-------|---------|---------|
+| **int64** | Integer numbers | 1, 42, 1000 |
+| **float64** | Decimal numbers | 3.14, 99.99 |
+| **object** | Text/strings | "Alice", "Sales" |
+| **datetime64** | Dates | 2024-01-15 |
+| **bool** | True/False | True, False |
+
+**When to use:**
+- After every data load (mandatory!)
+- To detect missing values
+- To verify data types are correct
+- To check total row count
+- To plan data cleaning steps
+
+#### 3. Summarizing Data with describe()
+
+**Purpose:** Get **statistical summary** of numeric columns
+
+**Basic Usage:**
+```python
+df.describe()
+```
+
+**Output:**
+```
+       EmployeeID        Salary  YearsExperience
+count        10.0          10.0             10.0
+mean        105.5       80800.0              4.2
+std           3.0       15947.5              1.9
+min         101.0       62000.0              2.0
+25%         103.0       68500.0              3.0
+50%         105.5       75000.0              4.0
+75%         107.8       91500.0              5.0
+max         110.0      110000.0              8.0
+```
+
+**Understanding each statistic:**
+- **count** - Number of non-null values
+- **mean** - Average value
+- **std** - Standard deviation (how spread out values are)
+- **min** - Minimum value
+- **25%** - First quartile (25% of values are below this)
+- **50%** - Median (middle value—half below, half above)
+- **75%** - Third quartile (75% of values are below this)
+- **max** - Maximum value
+
+**Interpreting Salary column:**
+```
+Average salary: $80,800
+Median salary: $75,000 (typical value)
+Range: $62,000 to $110,000 (spread of $48K)
+Standard deviation: $15,947 (moderate variation)
+```
+
+**Detecting outliers:**
+- Compare max to 75th percentile
+- If max >> 75th percentile → potential high outlier
+- Compare min to 25th percentile
+- If min << 25th percentile → potential low outlier
+- Large std relative to mean → high variability
+
+**Include all columns (not just numeric):**
+```python
+df.describe(include='all')
+```
+
+**For text columns:**
+- **unique** - Number of distinct values
+- **top** - Most frequent value
+- **freq** - Frequency of most common value
+
+**When to use:**
+- To understand numeric distributions
+- To check for outliers
+- To see data ranges (min/max)
+- To get quick statistics
+- To validate expected ranges
+
+#### 4. The Three-Method Inspection Workflow
+
+**Best practice: Use all three methods in order!**
+
+```python
+# 1. Load data
+df = pd.read_csv('file.csv')
+
+# 2. Quick visual check
+print(df.head())
+
+# 3. Structural health check (CRITICAL!)
+df.info()
+
+# 4. Statistical understanding
+print(df.describe())
+
+# 5. Explicit missing data check
+print(df.isnull().sum())
+
+# NOW safe to analyze!
+```
+
+**Comparison table:**
+
+| Method | Question | Shows | Best For |
+|--------|----------|-------|----------|
+| **head()** | What does my data look like? | Sample rows | Quick visual |
+| **info()** | What is my data structure? | Types, nulls | Detecting issues |
+| **describe()** | What are my distributions? | Statistics | Understanding numbers |
+
+**Remember:** Each method answers a different question—use all three!
+
+### Why Inspection is Mandatory
+
+**Think of inspection as:**
+- Reading a recipe before cooking
+- Checking mirrors before driving
+- Reading instructions before assembling furniture
+
+**Poor inspection leads to:**
+- ❌ Hidden missing data breaking operations
+- ❌ Wrong data types causing errors
+- ❌ Undetected outliers skewing analysis
+- ❌ Hours debugging preventable issues
+
+**Good inspection leads to:**
+- ✅ Confident understanding of data
+- ✅ Early detection of problems
+- ✅ Informed cleaning decisions
+- ✅ Reliable analysis results
+
+**Professional habit:** Every Data Scientist inspects data before analyzing. No exceptions!
+
+### Notebook Structure
+
+**Part 1:** Why DataFrame Inspection Matters
+- The problem: Common inspection mistakes
+- The solution: Three essential methods
+- Building the inspection habit
+
+**Part 2:** Inspecting Data with head()
+- What is head()?
+- Using default and custom row counts
+- Comparing head() and tail()
+- What head() reveals vs doesn't reveal
+
+**Part 3:** Inspecting Structure with info()
+- What is info()?
+- Reading info() output
+- Detecting missing data
+- Understanding data types
+- Why info() is most important
+
+**Part 4:** Summarizing Data with describe()
+- What is describe()?
+- Understanding statistics (count, mean, std, quartiles)
+- Interpreting percentiles
+- Detecting outliers
+- Including all columns
+
+**Part 5:** Knowing When to Use Each Method
+- The three-method workflow
+- When to use head(), info(), describe()
+- Comparison table
+- Complete inspection example
+
+**Part 6:** Building Inspection Habits
+- Professional inspection routine
+- Common mistakes to avoid
+- Real-world inspection example
+- Additional inspection methods (bonus)
+
+### Video Recording Requirements (~2 Minutes)
+
+Record a screen capture demonstrating DataFrame inspection.
+
+Your video must include:
+
+1. **Using head()** (~30 sec)
+   - Load a DataFrame
+   - Use `head()` to preview first rows
+   - Point out column names, index, sample values
+   - Explain what head() reveals
+
+2. **Using info()** (~35 sec)
+   - Use `info()` to show structure
+   - Highlight data types (int64, object, etc.)
+   - Emphasize non-null count to detect missing data
+   - Explain why info() is most important
+
+3. **Using describe()** (~30 sec)
+   - Use `describe()` for statistics
+   - Interpret at least one statistic (mean, min, max)
+   - Mention quartiles (25%, 50%, 75%)
+   - Explain what distributions tell you
+
+4. **Why This Matters** (~15 sec)
+   - Emphasize inspection prevents errors
+   - "These three methods answer different questions"
+   - "Always inspect before analyzing"
+   - Closing
+
+5. **Wrap-up** (~10 sec)
+   - Confirm understanding
+   - "Make inspection a mandatory habit"
+
+### Key Points to Emphasize
+
+1. **head() = Visual Preview** - See what data looks like
+2. **info() = Most Important** - Detects missing values and types
+3. **describe() = Statistics** - Understand distributions and ranges
+4. **All Three Needed** - Each answers different questions
+5. **Non-Null Count Critical** - Shows missing data immediately
+6. **Data Types Matter** - int64 vs object determines operations
+7. **Inspection is Mandatory** - Never skip this step
+8. **30 Seconds to Inspect** - Saves hours of debugging
+
+### Common Mistakes to Avoid
+
+❌ Skipping inspection and jumping to analysis
+
+❌ Only using head() without info() or describe()
+
+❌ Ignoring non-null counts in info() output
+
+❌ Not checking data types - numbers stored as 'object'
+
+❌ Assuming no missing data without verification
+
+❌ Not looking for outliers in describe()
+
+❌ Forgetting describe() only shows numeric columns by default
+
+❌ Starting calculations before understanding data structure
+
+### Submission Checklist
+
+- [ ] Opened `milestone_4_30_inspecting_dataframes.ipynb` in Jupyter
+- [ ] Imported Pandas successfully
+- [ ] Loaded at least one DataFrame
+- [ ] Used `head()` to preview first few rows
+- [ ] Used `head(3)` and `head(10)` with custom counts
+- [ ] Used `tail()` to check last rows
+- [ ] Used `info()` to inspect structure and data types
+- [ ] Identified non-null counts for all columns
+- [ ] Understood what different dtypes mean (int64, object, float64)
+- [ ] Used `describe()` to get statistical summaries
+- [ ] Interpreted mean, median, min, max values
+- [ ] Understood what quartiles (25%, 50%, 75%) represent
+- [ ] Checked for missing data with `.isnull().sum()`
+- [ ] Practiced the complete three-method workflow
+- [ ] Understood when to use each method
+- [ ] Built the habit of inspecting before analyzing
+- [ ] Recorded 2-minute walkthrough video showing:
+  - Using head() to preview data
+  - Using info() to show structure and detect missing values
+  - Using describe() to show statistics
+  - Explaining what each method reveals
+  - Emphasizing why inspection matters
+- [ ] Video uploaded and link ready
+- [ ] Pull Request created (if required)
+
+### Documentation
+
+For complete instructions and video script, see **[MILESTONE_4_30_QUICK_GUIDE.md](MILESTONE_4_30_QUICK_GUIDE.md)**
+
+### Status
+
+**Current Status:** ✅ Setup Complete - Ready for Testing and Video Recording
+
+**Files Created:**
+- ✅ `notebooks/milestone_4_30_inspecting_dataframes.ipynb` - Complete inspection methods demonstration
+- ✅ `MILESTONE_4_30_QUICK_GUIDE.md` - Video script and guidelines
+- ✅ `data/raw/employees.csv` - Employee dataset for inspection practice
+- ✅ `data/raw/sales_data.csv` - Sales dataset with missing values for demonstrating info()
+
+**Next Action:** Open the notebook in Jupyter, import Pandas, load DataFrames, practice using head(), info(), and describe() in sequence, understand what each method reveals, check for missing data, then record your demonstration showing why these three inspection methods are mandatory before any data analysis.

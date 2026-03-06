@@ -1,0 +1,11 @@
+OrderID,Product,Quantity,Price,OrderDate,CustomerCity
+1001,Laptop,2,1999.98,2024-01-15,New York
+1002,Mouse,5,149.95,2024-01-16,
+1003,Keyboard,3,239.97,2024-01-17,Chicago
+1004,Monitor,1,299.99,2024-01-18,Boston
+1005,Headphones,4,599.96,2024-01-19,Seattle
+1006,Laptop,1,999.99,2024-01-20,Austin
+1007,Mouse,10,299.90,2024-01-21,Denver
+1008,Keyboard,2,159.98,2024-01-22,
+1009,Monitor,3,899.97,2024-01-23,Miami
+1010,Headphones,1,149.99,2024-01-24,Portland
