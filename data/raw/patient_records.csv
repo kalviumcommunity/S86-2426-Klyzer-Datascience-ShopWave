@@ -1,0 +1,11 @@
+PatientID,Name,Age,Weight,BloodPressure,Diagnosis,LastVisit
+101,Alice Johnson,45,65.5,120/80,Flu,2024-01-15
+102,Bob Smith,,,130/85,,2024-01-16
+103,Charlie Brown,38,72.3,,Diabetes,
+104,Diana Prince,52,68.0,125/82,Flu,2024-01-18
+105,Eve Davis,,,,,2024-01-19
+106,Frank Miller,41,,,Diabetes,2024-01-20
+107,Grace Lee,36,58.5,118/78,Flu,2024-01-21
+108,Henry Wilson,48,80.2,135/90,,
+109,,33,63.0,122/80,Diabetes,2024-01-23
+110,Jack Taylor,,,128/84,Flu,2024-01-24

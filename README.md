@@ -3752,3 +3752,486 @@ For complete instructions and video script, see **[MILESTONE_4_30_QUICK_GUIDE.md
 - ✅ `data/raw/sales_data.csv` - Sales dataset with missing values for demonstrating info()
 
 **Next Action:** Open the notebook in Jupyter, import Pandas, load DataFrames, practice using head(), info(), and describe() in sequence, understand what each method reveals, check for missing data, then record your demonstration showing why these three inspection methods are mandatory before any data analysis.
+
+---
+
+## Milestone 4.34: Handling Missing Values Using Drop and Fill Strategies
+
+**Status:** ✅ Complete
+
+**Objective:** Master the critical skill of handling missing data responsibly using drop and fill strategies—making informed trade-offs that preserve data quality.
+
+### The Problem: Missing Data Is Inevitable
+
+Real-world datasets rarely arrive perfect. Missing values appear due to:
+- Incomplete user input (skipped survey questions)
+- Data collection failures (sensor errors, API timeouts)
+- Privacy restrictions (redacted information)
+- Merge mismatches (joining datasets with non-overlapping records)
+- Human error (forgotten entries)
+
+**Why it matters:**
+- Most analysis functions fail when encountering null values
+- Handling missing data incorrectly can be **worse than leaving it untouched**
+- Different strategies introduce different biases
+- No single automated solution fits all cases
+- **Choice of strategy affects all downstream analysis**
+
+**Common beginner mistakes:**
+1. ❌ Dropping all rows with ANY missing value → Lose 90% of dataset
+2. ❌ Filling categorical data with mean → Creates nonsense ("Department: 3.5")
+3. ❌ Making arbitrary decisions without understanding context
+4. ❌ Not checking percentage of missing data before deciding
+5. ❌ Using mean instead of median (affected by outliers)
+
+### Concept 1: The Drop Strategy
+
+**`dropna()`** removes rows or columns containing missing values.
+
+#### When to Drop Rows:
+```python
+# Original data with missing values
+df = pd.DataFrame({
+    'ID': [1, 2, 3, 4, 5],
+    'Age': [25, None, 30, 45, None],
+    'Income': [50000, 60000, None, 70000, 55000],
+    'City': ['NYC', 'LA', 'SF', None, 'NYC']
+})
+
+print("Original shape:", df.shape)  # (5, 4)
+print("Missing values:\n", df.isnull().sum())
+```
+
+**Output:**
+```
+Original shape: (5, 4)
+Missing values:
+ID         0
+Age        2
+Income     1
+City       1
+dtype: int64
+```
+
+#### Method 1: Drop ALL rows with ANY missing value (use cautiously!)
+```python
+# CAUTION: This can lose most of your data!
+df_drop_all = df.dropna()
+print("After dropna():", df_drop_all.shape)  # (2, 4) - Lost 60%!
+```
+
+**⚠️ Warning:** Often too aggressive—should only be used when:
+- Dataset is very large (millions of rows)
+- Missing values indicate invalid records
+- Can't reasonably estimate missing values
+
+#### Method 2: Drop only if specific columns are missing (RECOMMENDED)
+```python
+# Drop only if critical columns are missing
+df_drop_critical = df.dropna(subset=['ID', 'Age'])
+print("After dropping rows with missing ID or Age:", df_drop_critical.shape)
+# (3, 4) - More reasonable!
+```
+
+**✅ Best practice:** Target critical columns—don't lose entire row for non-essential missing data.
+
+#### Method 3: Drop only if too many values are missing
+```python
+# Drop row only if it has more than 2 missing values
+# thresh = minimum number of NON-NULL values required
+df_drop_thresh = df.dropna(thresh=3)  # Need at least 3 non-null
+print("After threshold drop:", df_drop_thresh.shape)
+```
+
+#### When to Drop Columns:
+```python
+# Drop columns with >50% missing data
+threshold = 0.5
+missing_pct = df.isnull().sum() / len(df)
+columns_to_drop = missing_pct[missing_pct > threshold].index
+df_drop_cols = df.drop(columns=columns_to_drop)
+```
+
+**Drop columns when:**
+- Column has >50% missing (unreliable)
+- Column is not essential for analysis
+- No reasonable way to fill
+
+**✅ Key insight:** Drop rows for critical missing data, drop columns when too sparse.
+
+### Concept 2: The Fill Strategy
+
+**`fillna()`** replaces missing values with estimates—introduces assumptions but preserves data.
+
+#### Method 1: Fill with Constant (Categorical Data)
+```python
+# Fill missing City with 'Unknown'
+df['City'] = df['City'].fillna('Unknown')
+print(df['City'])
+# Output: ['NYC', 'LA', 'SF', 'Unknown', 'NYC']
+```
+
+**When to use:**
+- Categorical/text data
+- Missing has meaning (e.g., 'Not Answered', 'Not Specified')
+- You have domain knowledge of appropriate default
+
+#### Method 2: Fill with Mean (Numeric - if normal distribution)
+```python
+# Fill missing Income with mean
+mean_income = df['Income'].mean()
+df['Income'] = df['Income'].fillna(mean_income)
+```
+
+**⚠️ Warning:** Mean is sensitive to outliers!
+```python
+incomes = [50000, 55000, 60000, 500000]  # One outlier
+mean = 166250  # Heavily skewed by outlier
+median = 57500  # More representative
+```
+
+#### Method 3: Fill with Median (Numeric - RECOMMENDED)
+```python
+# Fill missing Age with median (more robust)
+median_age = df['Age'].median()
+df['Age'] = df['Age'].fillna(median_age)
+```
+
+**✅ Best practice:** Median is better than mean for numeric data—not affected by outliers.
+
+#### Method 4: Fill with Mode (Most Common Value)
+```python
+# Fill missing Education with most common level
+mode_education = df['Education'].mode()[0]
+df['Education'] = df['Education'].fillna(mode_education)
+```
+
+**When to use:**
+- Categorical data
+- Discrete numeric data (ratings: 1, 2, 3, 4, 5)
+- When most common value makes sense
+
+#### Method 5: Forward Fill (Time Series)
+```python
+# Carry last known value forward
+df['Temperature'] = df['Temperature'].fillna(method='ffill')
+```
+
+**When to use:**
+- Time series data where values change slowly
+- Sensor readings, stock prices
+- Sequential data
+
+**⚠️ Not appropriate for:** Independent survey responses, different individuals' data
+
+### Concept 3: The Hybrid Strategy (Best Approach)
+
+**Professional approach:** Combine drop and fill based on data criticality.
+
+```python
+# Hybrid strategy
+df_clean = df.copy()
+
+# Step 1: Drop rows where critical columns are missing
+df_clean = df_clean.dropna(subset=['ID', 'Age'])
+
+# Step 2: Fill non-critical numeric columns with median
+df_clean['Income'] = df_clean['Income'].fillna(df_clean['Income'].median())
+
+# Step 3: Fill categorical columns with constant
+df_clean['City'] = df_clean['City'].fillna('Unknown')
+
+print("Original:", df.shape)
+print("Cleaned:", df_clean.shape)
+print("Missing values:", df_clean.isnull().sum().sum())
+```
+
+**Why hybrid works:**
+- Strict standards for critical data (drop if missing)
+- Flexible for non-critical data (fill reasonably)
+- Balances data quality with data quantity
+- Justifiable decisions for each column
+
+### Concept 4: Decision Framework
+
+**Flowchart:**
+```
+Is the column critical for analysis?
+├─ YES (e.g., ID, Age, Key metric)
+│  ├─ Missing % < 10% → FILL with median/mode
+│  ├─ Missing % 10-30% → DROP rows OR FILL carefully
+│  └─ Missing % > 30% → DROP column (too unreliable)
+│
+└─ NO (e.g., Optional comments, Secondary info)
+   ├─ Missing % < 20% → FILL with constant or statistics
+   ├─ Missing % 20-50% → FILL with 'Unknown' OR DROP column
+   └─ Missing % > 50% → DROP column
+```
+
+**Guidelines by Data Type:**
+
+| Data Type | Missing % | Strategy | Example |
+|-----------|-----------|----------|---------|
+| **Numeric (continuous)** | <10% | Fill with **median** | Age, Income, Weight |
+| **Numeric (with outliers)** | <10% | Fill with **median** (not mean) | Salary, Price |
+| **Categorical** | <20% | Fill with **mode** or **'Unknown'** | City, Status, Category |
+| **Ratings (1-5)** | <10% | Fill with **median** or **mode** | Satisfaction, Rating |
+| **Time Series** | Any | **Forward fill** or **backward fill** | Stock prices, Temperature |
+| **Identifiers** | Any | **DROP row** (cannot estimate) | ID, Email, Username |
+
+### Concept 5: Avoiding Common Pitfalls
+
+#### Mistake 1: Filling Categorical with Mean
+```python
+# ❌ WRONG: Creates nonsense like "Education: 2.7"
+df['Education'] = df['Education'].fillna(df['Education'].mean())
+
+# ✅ CORRECT: Use mode or constant
+df['Education'] = df['Education'].fillna(df['Education'].mode()[0])
+# OR
+df['Education'] = df['Education'].fillna('Not Specified')
+```
+
+#### Mistake 2: Using Mean Instead of Median
+```python
+# Data with outlier
+salaries = [50000, 52000, 51000, 500000]  # One executive
+
+mean_salary = np.mean(salaries)     # 163250 (distorted)
+median_salary = np.median(salaries)  # 51500 (representative)
+
+# ✅ Always use median for numeric data
+df['Salary'] = df['Salary'].fillna(df['Salary'].median())
+```
+
+#### Mistake 3: Not Checking Data Loss Percentage
+```python
+# Always check before committing
+original_rows = len(df)
+df_after = df.dropna()
+loss_pct = ((original_rows - len(df_after)) / original_rows) * 100
+
+if loss_pct > 30:
+    print(f"⚠️ WARNING: {loss_pct:.1f}% data loss!")
+    print("Consider hybrid approach instead")
+```
+
+#### Mistake 4: Not Verifying After Cleaning
+```python
+# Always verify no missing values remain (if that was your goal)
+print("Missing values after cleaning:")
+print(df.isnull().sum())
+
+# Check that distributions didn't change drastically
+print("\nBefore and after statistics:")
+print(df_original['Income'].describe())
+print(df_clean['Income'].describe())
+```
+
+### Concept 6: Comparing Strategies
+
+```python
+import pandas as pd
+
+# Load survey data with missing values
+df = pd.read_csv('data/raw/survey_data.csv')
+
+print("ORIGINAL DATA")
+print(f"Shape: {df.shape}")
+print(f"Missing values: {df.isnull().sum().sum()}")
+
+# Strategy 1: Drop all
+df_drop_all = df.dropna()
+print(f"\nDROP ALL: {df_drop_all.shape} - Lost {len(df) - len(df_drop_all)} rows")
+
+# Strategy 2: Drop critical only
+df_drop_critical = df.dropna(subset=['Age', 'Income'])
+print(f"DROP CRITICAL: {df_drop_critical.shape} - Lost {len(df) - len(df_drop_critical)} rows")
+
+# Strategy 3: Fill all
+df_fill = df.copy()
+df_fill['Age'] = df_fill['Age'].fillna(df_fill['Age'].median())
+df_fill['Income'] = df_fill['Income'].fillna(df_fill['Income'].median())
+df_fill['City'] = df_fill['City'].fillna('Unknown')
+print(f"FILL ALL: {df_fill.shape} - Lost 0 rows, filled {df.isnull().sum().sum()} values")
+
+# Strategy 4: Hybrid
+df_hybrid = df.dropna(subset=['Age', 'Income'])
+df_hybrid['City'] = df_hybrid['City'].fillna('Unknown')
+df_hybrid['Satisfaction'] = df_hybrid['Satisfaction'].fillna(df_hybrid['Satisfaction'].median())
+print(f"HYBRID: {df_hybrid.shape} - Lost {len(df) - len(df_hybrid)} rows, filled remaining")
+```
+
+**Output:**
+```
+ORIGINAL DATA
+Shape: (10, 6)
+Missing values: 9
+
+DROP ALL: (3, 6) - Lost 7 rows (70% loss!)
+DROP CRITICAL: (5, 6) - Lost 5 rows (50% loss)
+FILL ALL: (10, 6) - Lost 0 rows, filled 9 values
+HYBRID: (5, 6) - Lost 5 rows, filled remaining (BALANCED!)
+```
+
+**Key takeaway:**
+- **Drop all** → Clean data, but massive loss
+- **Drop critical** → Targeted, better than drop all
+- **Fill all** → No data loss, but introduces estimates
+- **Hybrid** → ✅ Best balance between quality and completeness
+
+### Why This Matters
+
+**Real-world scenarios:**
+
+1. **Medical Records:** Can't estimate patient's age arbitrarily—could affect diagnosis
+   - **Solution:** Drop rows with missing age/weight OR use conservative median
+
+2. **Customer Survey:** Optional comment field 80% empty
+   - **Solution:** Drop column (not essential) OR fill with 'No Comment'
+
+3. **Sales Data:** Few missing transaction amounts (<5%)
+   - **Solution:** Fill with median transaction value
+
+4. **Time Series:** Sensor reading occasionally fails
+   - **Solution:** Forward fill (carry last known value)
+
+**Impact of poor handling:**
+- Biased analysis results (if drop removes specific demographic)
+- Invalid conclusions (if fill introduces fake patterns)
+- Failed models (if missing data not addressed)
+- Unreliable predictions
+
+**✅ Professional habit:** Always document your cleaning decisions!
+
+### Notebook Structure
+
+The notebook `milestone_4_34_handling_missing_values.ipynb` contains:
+
+1. **Part 1: Understanding the Missing Data Problem** (Cells 1-10)
+   - Loading data with missing values
+   - Inspecting missing data patterns with `isnull().sum()`
+   - Calculating missing percentages
+   - Visualizing which rows are affected
+
+2. **Part 2: Strategy 1 - Dropping Missing Values** (Cells 11-25)
+   - Method 1: Drop rows with ANY missing (`dropna()`)
+   - Method 2: Drop rows only if ALL missing (`dropna(how='all')`)
+   - Method 3: Drop based on threshold (`dropna(thresh=...)`)
+   - Method 4: Drop rows based on specific columns (`dropna(subset=[...])`)
+   - Method 5: Drop columns with excessive missing data
+   - Impact analysis (shape changes, data loss percentage)
+
+3. **Part 3: Strategy 2 - Filling Missing Values** (Cells 26-45)
+   - Method 1: Fill with constant (`fillna('Unknown')`)
+   - Method 2: Fill numeric with mean (`fillna(df['Col'].mean())`)
+   - Method 3: Fill numeric with median (`fillna(df['Col'].median())`)
+   - Method 4: Fill with mode (`fillna(df['Col'].mode()[0])`)
+   - Method 5: Forward fill for time series (`fillna(method='ffill')`)
+   - Method 6: Backward fill (`fillna(method='bfill')`)
+   - Method 7: Fill multiple columns at once
+
+4. **Part 4: Comparing Drop vs Fill Strategies** (Cells 46-55)
+   - Side-by-side comparison of all strategies
+   - Strategy 1: Drop ALL (aggressive)
+   - Strategy 2: Drop CRITICAL (targeted)
+   - Strategy 3: Fill ALL (preserve data)
+   - Strategy 4: HYBRID (balanced approach)
+   - Summary comparison table
+
+5. **Part 5: Decision Framework** (Cells 56-60)
+   - Decision tree: When to drop vs fill
+   - Guidelines by data type (numeric, categorical, time series)
+   - Missing percentage thresholds
+   - Best practices by scenario
+
+6. **Part 6: Avoiding Common Mistakes** (Cells 61-70)
+   - Mistake 1: Filling categorical with mean
+   - Mistake 2: Not checking impact after changes
+   - Mistake 3: Dropping too aggressively
+   - Mistake 4: Not documenting decisions
+   - Verification techniques
+
+7. **Part 7: Real-World Example - Patient Records** (Cells 71-80)
+   - Loading patient data with extensive missing values
+   - Analyzing missing patterns (some columns 40% missing)
+   - Applying hybrid strategy step-by-step
+   - Documenting each decision
+   - Verifying final cleaned dataset
+
+8. **Summary: Key Takeaways** (Cells 81-85)
+   - Quick reference table: Drop vs Fill
+   - Filling strategies by data type
+   - The hybrid approach (best practice code template)
+   - Critical points checklist
+   - Common mistakes to avoid
+
+### Video Requirements (2 Minutes)
+
+**Must demonstrate all 5 operations:**
+
+1. **Detect Missing Values (0:10-0:30)**
+   ```python
+   # Show missing values
+   print(df.isnull().sum())
+   print((df.isnull().sum() / len(df)) * 100)  # Percentage
+   ```
+
+2. **Drop Rows with Missing Data (0:30-0:55)**
+   ```python
+   # Show aggressive vs targeted approach
+   df_drop_all = df.dropna()  # Loses too much
+   df_drop_critical = df.dropna(subset=['Age', 'Income'])  # Better
+   print("Data loss:", len(df) - len(df_drop_critical))
+   ```
+
+3. **Fill Numeric Values (0:55-1:20)**
+   ```python
+   # Fill with median (robust to outliers)
+   df['Age'] = df['Age'].fillna(df['Age'].median())
+   df['Income'] = df['Income'].fillna(df['Income'].median())
+   ```
+
+4. **Fill Categorical Values (1:20-1:35)**
+   ```python
+   # Fill with mode or constant
+   df['Education'] = df['Education'].fillna(df['Education'].mode()[0])
+   df['City'] = df['City'].fillna('Unknown')
+   ```
+
+5. **Compare Strategies (1:35-1:50)**
+   ```python
+   # Show hybrid approach and comparison
+   print("Drop only:", df_drop.shape)
+   print("Fill only:", df_fill.shape)
+   print("Hybrid:", df_hybrid.shape)  # Best balance
+   ```
+
+**Script available in:** `MILESTONE_4_34_QUICK_GUIDE.md`
+
+### Submission Checklist
+
+- [ ] **Watched** all cells execute successfully
+- [ ] **Understood** when to use drop vs fill
+- [ ] **Practiced** detecting missing values with `isnull().sum()`
+- [ ] **Demonstrated** dropping rows with `dropna()` and `dropna(subset=[...])`
+- [ ] **Demonstrated** filling with `fillna()` using median for numeric
+- [ ] **Demonstrated** filling categorical with mode or constant
+- [ ] **Compared** all strategies (drop, fill, hybrid)
+- [ ] **Explained** trade-offs (drop = lose data, fill = introduce assumptions)
+- [ ] **Showed** shape changes before/after each operation
+- [ ] **Justified** why you chose each strategy based on data type
+- [ ] **Verified** no missing values remain (if that was your goal)
+- [ ] **Documented** your cleaning decisions
+- [ ] **Recorded** 2-minute video showing all 5 required operations
+- [ ] **Uploaded** video following course guidelines
+- [ ] **Tested** hybrid approach on both datasets
+
+### Deliverables
+
+- ✅ `notebooks/milestone_4_34_handling_missing_values.ipynb` - Complete notebook with 80+ cells
+- ✅ `MILESTONE_4_34_QUICK_GUIDE.md` - Video script and guidelines
+- ✅ `data/raw/survey_data.csv` - Demo dataset with moderate missing data
+- ✅ `data/raw/patient_records.csv` - Complex dataset with extensive missing data
+
+**Next Action:** Open the notebook in Jupyter, import Pandas, load both datasets, work through all examples understanding when to drop vs fill, practice the hybrid approach on both datasets, verify no unexpected data loss or bias introduction, then record your demonstration showing why handling missing data responsibly is critical for reliable analysis and how the hybrid strategy balances data quality with data quantity.

@@ -1,0 +1,11 @@
+RespondentID,Age,Income,Education,Satisfaction,City
+1,25,45000,Bachelor,5,New York
+2,32,,Master,4,
+3,28,52000,Bachelor,,Chicago
+4,,61000,PhD,5,Boston
+5,45,,,3,Seattle
+6,29,48000,Bachelor,4,Austin
+7,38,72000,Master,5,Denver
+8,,55000,Bachelor,3,
+9,31,49000,,4,Portland
+10,27,,Bachelor,5,Miami
