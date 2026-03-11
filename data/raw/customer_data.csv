@@ -1,0 +1,16 @@
+CustomerID,Name,Email,City,SignupDate
+1001,John Smith,john.smith@email.com,New York,2024-01-15
+1002,Sarah Johnson,sarah.j@email.com,Los Angeles,2024-01-18
+1001,John Smith,john.smith@email.com,New York,2024-01-15
+1003,Mike Williams,mike.w@email.com,Chicago,2024-01-20
+1004,Emily Davis,emily.d@email.com,Houston,2024-01-22
+1002,Sarah Johnson,sarah.j@email.com,Los Angeles,2024-01-18
+1005,David Brown,david.b@email.com,Phoenix,2024-01-25
+1006,Lisa Martinez,lisa.m@email.com,Philadelphia,2024-01-28
+1003,Mike Williams,mike.w@email.com,Chicago,2024-01-20
+1007,James Wilson,james.w@email.com,San Antonio,2024-02-01
+1008,Maria Garcia,maria.g@email.com,San Diego,2024-02-03
+1001,John Smith,john.smith@email.com,New York,2024-01-15
+1009,Robert Taylor,robert.t@email.com,Dallas,2024-02-05
+1010,Jennifer Anderson,jennifer.a@email.com,San Jose,2024-02-08
+1008,Maria Garcia,maria.g@email.com,San Diego,2024-02-03
