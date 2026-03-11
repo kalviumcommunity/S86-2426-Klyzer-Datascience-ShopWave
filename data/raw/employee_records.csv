@@ -1,0 +1,11 @@
+Employee ID,First Name,LAST_NAME,Email Address,Department Name,Salary ($),Hire Date,Status
+E001,  John,SMITH,john.smith@company.com,  Sales  ,$75000,01/15/2020,active
+E002,Sarah  ,JOHNSON,Sarah.Johnson@company.com,MARKETING,$82000,03-22-2019,Active
+E003,Mike,williams,mike.w@company.com,sales,$68000,2021-05-10,ACTIVE
+E004,  Emily  ,DAVIS  ,emily.davis@company.com,  HR  ,$71000,12/08/2020,inactive
+E005,David,brown,david.b@company.com,IT,$95000,2018-11-30,Active
+E006,Lisa,MARTINEZ,lisa.m@company.com,Sales,$73000,06-15-2021,active
+E007,James,Wilson  ,james.w@company.com,Marketing,$79000,2020-09-01,Active
+E008,Maria,GARCIA,maria.g@company.com,it,$88000,01/20/2019,ACTIVE
+E009,Robert,Taylor,robert.t@company.com,HR,$69000,2022-03-15,active
+E010,Jennifer,ANDERSON  ,jennifer.a@company.com,  Sales,$77000,07-10-2020,Active

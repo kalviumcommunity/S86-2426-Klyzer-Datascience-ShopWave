@@ -1,0 +1,11 @@
+Product-ID,Product Name,Category,Price (USD),Stock Count,SKU #,Last Updated,availability
+P001,  Wireless Mouse  ,Electronics,$25.99  ,150,WM-001,2024-01-15,In Stock
+P002,USB CABLE,electronics,  $12.50,200,USB-002,01/20/2024,in stock
+P003,keyboard,ELECTRONICS,$75.00  ,75,KB-003,2024-02-10,IN STOCK
+P004,  Monitor Stand,Office Supplies,  $45.99,50,MS-004,03-05-2024,Out of Stock
+P005,LAPTOP BAG  ,accessories,$89.99,30,LB-005,2024-01-30,In Stock
+P006,Desk Lamp,office supplies,  $32.50  ,100,DL-006,02/15/2024,in stock
+P007,phone holder,Electronics,$18.99,180,PH-007,2024-03-01,IN STOCK
+P008,  NOTEBOOK,Office Supplies,  $5.99,500,NB-008,01-25-2024,In Stock
+P009,Pen Set  ,office supplies,$12.99  ,250,PS-009,2024-02-20,in stock
+P010,webcam,ELECTRONICS,  $120.00,45,WC-010,03/10/2024,In Stock
