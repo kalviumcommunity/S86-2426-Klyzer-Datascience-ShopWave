@@ -4784,3 +4784,435 @@ The notebook `milestone_4_35_duplicate_records.ipynb` contains:
 - ✅ `data/raw/transactions.csv` - Transaction data showing revenue impact
 
 **Next Action:** Open the notebook in Jupyter, import Pandas, load both datasets, detect duplicates with `duplicated()`, inspect all occurrences with `keep=False`, remove duplicates using `drop_duplicates(subset=...)`, verify no duplicates remain, calculate impact on revenue showing how duplicates inflated metrics, then record your demonstration explaining why duplicate records corrupt analysis and why each observation should be counted exactly once for reliable business decisions.
+
+---
+
+## Milestone 4.36: Standardizing Column Names and Data Formats
+
+### Objectives
+
+Master the essential skill of **standardizing column names and data formats** to create clean, predictable, and analysis-ready datasets.
+
+**What you'll learn:**
+- Why messy column names lead to messy, error-prone code
+- How to apply **snake_case** naming convention (the professional standard)
+- Techniques for **standardizing text data** (case, whitespace, categories)
+- How to **clean and convert** numeric and date formats
+- Creating reusable standardization functions for any dataset
+
+**Key insight:** Standardization isn't optional—it's the foundation of clean, reliable, maintainable code. Standardize early, standardize consistently, and your entire analysis workflow becomes smoother.
+
+---
+
+### Core Concepts
+
+#### 1. The Problem with Messy Column Names
+
+**Common issues:**
+- **Mixed casing:** "First Name" vs "FirstName" vs "first_name" vs "FIRST_NAME"
+- **Spaces in names:** "Email Address", "Department Name", "Hire Date"
+- **Special characters:** "Salary ($)", "Price (USD)", "SKU #"
+- **Inconsistent styles:** Some snake_case, some Title Case, some UPPERCASE
+
+**Impact on code:**
+```python
+# ❌ MESSY: Must use quotes, remember exact casing
+employees_df["First Name"]
+employees_df["Salary ($)"]  # Special characters make it worse
+
+# ✅ CLEAN: Simple dot notation or brackets
+employees_df.first_name
+employees_df.salary
+employees_df["first_name"]
+```
+
+**Why it matters:**
+- Code becomes harder to write and read
+- Easy to make typos with spaces and casing
+- Can't use clean dot notation
+- Merging datasets becomes painful
+
+#### 2. snake_case Convention (The Standard)
+
+**Definition:** All lowercase letters with underscores between words.
+
+**Examples:**
+- "Employee ID" → `employee_id`
+- "First Name" → `first_name`
+- "Salary ($)" → `salary`
+- "Email Address" → `email_address`
+- "Department Name" → `department_name`
+
+**Standardization rules:**
+1. Convert all letters to lowercase
+2. Replace spaces with underscores
+3. Remove special characters ($, #, (), etc.)
+4. Remove multiple consecutive underscores
+5. Strip leading/trailing underscores
+
+**Code pattern:**
+```python
+df.columns = (df.columns
+              .str.lower()
+              .str.replace(' ', '_', regex=False)
+              .str.replace(r'[^a-z0-9_]', '', regex=True)
+              .str.replace(r'_+', '_', regex=True)
+              .str.strip('_'))
+```
+
+#### 3. Standardizing Text Data
+
+**Text formatting issues:**
+- **Extra whitespace:** "  John", "Sarah  ", "  Sales  "
+- **Mixed casing:** "Active", "active", "ACTIVE"
+- **Inconsistent categories:** "Sales", "sales", "SALES", "  Sales  "
+
+**Solution:**
+```python
+# Strip whitespace
+df['department'] = df['department'].str.strip()
+
+# Standardize casing (choose one approach)
+df['department'] = df['department'].str.title()   # Title Case
+df['department'] = df['department'].str.lower()   # lowercase
+df['department'] = df['department'].str.upper()   # UPPERCASE
+```
+
+**Impact:**
+- **Before:** "Sales", "sales", "SALES", "  Sales  " counted as 4 different values
+- **After:** "Sales" (or "sales") → 1 unified value
+- **Result:** Groupby, filtering, and counting work correctly
+
+#### 4. Standardizing Numeric Formats
+
+**Numeric data issues:**
+- **Currency symbols:** "$75,000", "€1,200"
+- **Thousand separators:** "75,000" stored as text
+- **Data type:** Stored as `object` (string) instead of `float` or `int`
+
+**Solution:**
+```python
+# Remove symbols and convert to numeric
+df['salary'] = (df['salary']
+                .str.replace('$', '', regex=False)
+                .str.replace(',', '', regex=False)
+                .str.strip()
+                .astype(float))
+```
+
+**Impact:**
+- **Before:** Cannot calculate mean, sum, or perform comparisons
+- **After:** All mathematical operations work correctly
+
+#### 5. Standardizing Date Formats
+
+**Date format issues:**
+- **Mixed formats:** "01/15/2020", "2020-01-15", "15-Jan-2020"
+- **Data type:** Stored as `object` (string) instead of `datetime`
+
+**Solution:**
+```python
+# Convert to datetime
+df['hire_date'] = pd.to_datetime(df['hire_date'], 
+                                  infer_datetime_format=True)
+```
+
+**Impact:**
+- **Before:** Cannot sort chronologically, filter by date, or calculate tenure
+- **After:** All date operations work (filtering, sorting, extracting year/month/day)
+
+---
+
+### Standardization Workflow
+
+**Professional pattern (apply to EVERY dataset):**
+
+```python
+def standardize_dataframe(df, text_cols=None, numeric_cols=None, date_cols=None):
+    """
+    Complete standardization workflow
+    
+    Parameters:
+    - df: Input DataFrame
+    - text_cols: List of text columns to standardize
+    - numeric_cols: List of numeric columns to clean
+    - date_cols: List of date columns to convert
+    """
+    df_clean = df.copy()
+    
+    # Step 1: Standardize column names (snake_case)
+    df_clean.columns = (df_clean.columns
+                        .str.lower()
+                        .str.replace(' ', '_', regex=False)
+                        .str.replace(r'[^a-z0-9_]', '', regex=True)
+                        .str.replace(r'_+', '_', regex=True)
+                        .str.strip('_'))
+    
+    # Step 2: Standardize text (strip whitespace, title case)
+    if text_cols:
+        for col in text_cols:
+            if col in df_clean.columns:
+                df_clean[col] = df_clean[col].str.strip().str.title()
+    
+    # Step 3: Standardize numeric (remove symbols, convert)
+    if numeric_cols:
+        for col in numeric_cols:
+            if col in df_clean.columns:
+                df_clean[col] = (df_clean[col]
+                                .str.replace(r'[$,]', '', regex=True)
+                                .str.strip()
+                                .astype(float))
+    
+    # Step 4: Standardize dates
+    if date_cols:
+        for col in date_cols:
+            if col in df_clean.columns:
+                df_clean[col] = pd.to_datetime(df_clean[col], 
+                                               infer_datetime_format=True)
+    
+    return df_clean
+```
+
+**Usage:**
+```python
+# Apply to any dataset
+df_clean = standardize_dataframe(
+    df,
+    text_cols=['department', 'status', 'category'],
+    numeric_cols=['salary', 'price'],
+    date_cols=['hire_date', 'last_updated']
+)
+```
+
+---
+
+### Notebook Structure
+
+The notebook (`milestone_4_36_standardizing_data.ipynb`) contains comprehensive examples:
+
+**Part 1: Understanding the Mess**
+- Load data with messy column names
+- Inspect formatting issues (spaces, casing, special characters)
+- Show text inconsistencies (extra whitespace, mixed case)
+- Demonstrate impact on operations
+
+**Part 2: Standardizing Column Names**
+- Method 1: Manual renaming (not scalable)
+- Method 2: Automated function (RECOMMENDED)
+- Method 3: Pandas string methods (quick alternative)
+- Before/after comparison
+- Benefits of clean column names
+
+**Part 3: Standardizing Text Data**
+- Problem: Inconsistent text formatting
+- Step 1: Strip whitespace with `.str.strip()`
+- Step 2: Standardize casing with `.str.title()` or `.str.lower()`
+- Verification: Check distribution after standardization
+
+**Part 4: Standardizing Numeric Formats**
+- Problem: Salary stored as text (object type)
+- Solution: Remove currency symbols and convert to float
+- Verify mathematical operations work
+
+**Part 5: Standardizing Date Formats**
+- Problem: Mixed date formats (MM/DD/YYYY, YYYY-MM-DD, etc.)
+- Solution: Convert to datetime with `pd.to_datetime()`
+- Enable date-based operations
+
+**Part 6: Complete Standardization Workflow**
+- All-in-one function covering all steps
+- Reusable for any dataset
+- Clear progress reporting
+
+**Part 7: Real-World Example - Product Inventory**
+- Load messy product data
+- Apply complete standardization
+- Verify unique values unified
+- Calculate statistics (now possible!)
+
+**Part 8: Before and After Comparison**
+- Visual side-by-side comparison
+- Column names: messy → clean
+- Data types: object → numeric/datetime
+- Data quality improvements
+
+---
+
+### Video Requirements (~2 minutes)
+
+Your demonstration MUST show these 5 things:
+
+#### 1. Show Messy Column Names (0:15 - 0:30)
+```python
+employees_df = pd.read_csv('../data/raw/employee_records.csv')
+print(employees_df.columns.tolist())
+```
+**Point out:** Mixed casing, spaces, special characters
+
+#### 2. Apply Column Name Standardization (0:30 - 0:50)
+```python
+def standardize_column_names(df):
+    df_clean = df.copy()
+    df_clean.columns = (df_clean.columns
+                        .str.lower()
+                        .str.replace(' ', '_', regex=False)
+                        .str.replace(r'[^a-z0-9_]', '', regex=True))
+    return df_clean
+
+employees_clean = standardize_column_names(employees_df)
+print(employees_clean.columns.tolist())
+```
+**Show:** Before and after column names (snake_case result)
+
+#### 3. Standardize Text Data (0:50 - 1:15)
+```python
+print("Department (BEFORE):", employees_clean.department_name.unique())
+employees_clean['department_name'] = employees_clean['department_name'].str.strip().str.title()
+print("Department (AFTER):", employees_clean.department_name.unique())
+```
+**Show:** Multiple variations unified to one consistent value
+
+#### 4. Standardize Numeric Data (1:15 - 1:35)
+```python
+# Show salary is object (text) type
+print("Type:", employees_clean.salary.dtype)
+
+# Convert to numeric
+employees_clean['salary'] = (employees_clean['salary']
+                             .str.replace('$', '', regex=False)
+                             .astype(float))
+
+# Show calculations work
+print(f"Mean: ${employees_clean.salary.mean():,.2f}")
+```
+**Show:** Type changes from object → float64, calculations work
+
+#### 5. Before/After Comparison (1:35 - 1:55)
+```python
+print("BEFORE → AFTER:")
+for old, new in zip(employees_df.columns, employees_clean.columns):
+    print(f"  {old} → {new}")
+```
+**Show:** Complete transformation from messy to clean
+
+#### Timing Breakdown:
+- **0:00 - 0:15:** Introduction and objectives (15 sec)
+- **0:15 - 0:30:** Show messy column names problem (15 sec)
+- **0:30 - 0:50:** Apply standardization function (20 sec)
+- **0:50 - 1:15:** Standardize text data (25 sec)
+- **1:15 - 1:35:** Standardize numeric data (20 sec)
+- **1:35 - 1:55:** Before/after comparison (20 sec)
+- **1:55 - 2:00:** Wrap-up and key takeaways (5 sec)
+
+**Total:** 2 minutes
+
+---
+
+### Datasets
+
+**Employee Records (`data/raw/employee_records.csv`):**
+- 10 employee rows with deliberately messy formatting
+- Column name issues: Mixed case, spaces, special characters
+- Text issues: Extra whitespace, inconsistent casing
+- Demonstrates: Column standardization, text cleaning
+
+**Product Inventory (`data/raw/product_inventory.csv`):**
+- 10 product rows with additional complexity
+- Additional issues: Hyphens in names, currency symbols in prices
+- Category variations: "Electronics", "electronics", "ELECTRONICS"
+- Demonstrates: Advanced standardization scenarios
+
+---
+
+### Submission Checklist
+
+Before submitting, verify you have:
+
+#### ✅ Code Requirements:
+- [ ] Load employee data and show original messy column names
+- [ ] Create standardization function that converts to snake_case
+- [ ] Apply standardization and show cleaned column names
+- [ ] Standardize text data (strip whitespace, unify casing)
+- [ ] Show before/after for department or status column
+- [ ] Convert at least one column to proper numeric type
+- [ ] Show calculations work after numeric conversion
+- [ ] Display side-by-side before/after comparison
+- [ ] Verify data types changed correctly (object → float64, etc.)
+
+#### ✅ Understanding Requirements:
+- [ ] Explain why messy column names cause problems
+- [ ] Describe snake_case convention (lowercase + underscores)
+- [ ] Explain `.str.strip()` removes leading/trailing whitespace
+- [ ] Explain `.str.title()` or `.str.lower()` standardizes casing
+- [ ] Explain why removing currency symbols enables calculations
+- [ ] Describe benefits of standardization (clean code, correct operations)
+
+#### ✅ Video Requirements:
+- [ ] Video is ~2 minutes long (1:50 - 2:10 acceptable)
+- [ ] Shows messy column names with spaces and special characters
+- [ ] Demonstrates snake_case standardization function
+- [ ] Shows text cleaning (strip and case standardization)
+- [ ] Converts at least one column to numeric type
+- [ ] Displays before/after comparison clearly
+- [ ] Explains why standardization matters
+- [ ] All code executes without errors
+- [ ] Audio is clear and screen is readable
+
+#### ✅ Deliverables:
+- [ ] `notebooks/milestone_4_36_standardizing_data.ipynb` - Complete notebook
+- [ ] `guides/MILESTONE_4_36_QUICK_GUIDE.md` - Video script
+- [ ] `data/raw/employee_records.csv` - Demo dataset
+- [ ] `data/raw/product_inventory.csv` - Additional examples
+- [ ] README updated with this section
+- [ ] 2-minute video demonstrating standardization
+- [ ] All code tested and working
+
+---
+
+### Key Takeaways
+
+**Standardization is mandatory:**
+- Apply at the start of EVERY analysis workflow
+- Non-negotiable for professional data work
+- Foundation for clean, maintainable code
+
+**Use snake_case consistently:**
+- Industry standard for Python/Pandas
+- All lowercase with underscores
+- No spaces or special characters
+
+**Standardize text thoroughly:**
+- Strip whitespace (`.str.strip()`)
+- Unify casing (`.str.title()` or `.str.lower()`)
+- Consistent categories enable correct grouping
+
+**Convert types properly:**
+- Remove currency symbols from numeric columns
+- Convert text to proper types (float, int, datetime)
+- Verify operations work after conversion
+
+**Create reusable functions:**
+- Don't repeat standardization code
+- Build a standardization toolkit
+- Apply consistently across all projects
+
+---
+
+### Resources
+
+- **Notebook:** `notebooks/milestone_4_36_standardizing_data.ipynb`
+- **Quick Guide:** `guides/MILESTONE_4_36_QUICK_GUIDE.md`
+- **Datasets:**
+  - `data/raw/employee_records.csv` - Employee data with messy formats
+  - `data/raw/product_inventory.csv` - Product data with additional complexity
+
+---
+
+### Status: ✅ Complete
+
+- ✅ `notebooks/milestone_4_36_standardizing_data.ipynb` - Complete notebook with 80+ cells
+- ✅ `MILESTONE_4_36_QUICK_GUIDE.md` - Video script and guidelines
+- ✅ `data/raw/employee_records.csv` - Demo dataset with messy column names
+- ✅ `data/raw/product_inventory.csv` - Additional complex examples
+
+**Next Action:** Open the notebook in Jupyter, import Pandas, load the employee dataset, standardize column names using the automated function, clean text data with strip and title methods, convert salary to numeric type, display before/after comparison showing clean snake_case columns and proper data types, then record your demonstration explaining why standardization is the critical first step in every data analysis workflow and how it prevents errors and makes code maintainable.
