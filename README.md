@@ -4235,3 +4235,552 @@ The notebook `milestone_4_34_handling_missing_values.ipynb` contains:
 - ✅ `data/raw/patient_records.csv` - Complex dataset with extensive missing data
 
 **Next Action:** Open the notebook in Jupyter, import Pandas, load both datasets, work through all examples understanding when to drop vs fill, practice the hybrid approach on both datasets, verify no unexpected data loss or bias introduction, then record your demonstration showing why handling missing data responsibly is critical for reliable analysis and how the hybrid strategy balances data quality with data quantity.
+
+---
+
+## Milestone 4.35: Identifying and Removing Duplicate Records
+
+**Status:** ✅ Complete
+
+**Objective:** Master the essential skill of detecting and removing duplicate records to ensure your dataset represents unique, reliable observations.
+
+### The Problem: Duplicate Data Corrupts Analysis
+
+Duplicate records are a common data quality issue that silently corrupts analysis results. They occur due to:
+- Data entry errors (same record entered multiple times)
+- System errors (repeated API calls, duplicate form submissions)
+- Merge operations (joining datasets creates duplicates)
+- Multiple data sources (same data collected from different systems)
+- Time-based confusion (person appears multiple times)
+
+**Why it matters:**
+- Counting duplicates as unique observations inflates metrics
+- Statistical summaries become misleading (average skewed)
+- Business decisions based on wrong numbers
+- Resource waste (sending same email twice to same person)
+- **Each duplicate row should be counted exactly once**
+
+**Common beginner mistakes:**
+1. ❌ Not detecting duplicates before analysis → Inflated counts
+2. ❌ Removing duplicates blindly without inspection
+3. ❌ Using all columns when only key columns matter
+4. ❌ Not verifying deduplication worked
+5. ❌ Assuming all repeated values are errors
+
+### Concept 1: Detecting Duplicate Rows
+
+**`duplicated()`** returns a boolean Series marking duplicate rows.
+
+#### Basic Duplicate Detection:
+```python
+# Check for duplicate rows
+is_duplicate = df.duplicated()
+print(f"Number of duplicates: {is_duplicate.sum()}")
+```
+
+**Output:**
+```
+Number of duplicates: 5
+```
+
+**Important:** By default, `duplicated()` marks duplicates as `True` EXCEPT the first occurrence.
+- First occurrence = `False` (original)
+- Subsequent occurrences = `True` (duplicates)
+
+#### Viewing All Duplicate Rows:
+```python
+# Show only rows marked as duplicates (excluding first occurrence)
+print(df[is_duplicate])
+
+# BETTER: Show ALL rows involved in duplication (including first)
+all_duplicates = df[df.duplicated(keep=False)]
+print(all_duplicates.sort_values('CustomerID'))
+```
+
+**Why `keep=False` is important:**
+- Shows the original plus all duplicates
+- Provides full context of duplication
+- Helps you understand which records are duplicated
+
+#### Counting Duplicate Occurrences:
+```python
+# Count how many times each value appears
+value_counts = df['CustomerID'].value_counts()
+print("Customers appearing more than once:")
+print(value_counts[value_counts > 1])
+```
+
+**Output:**
+```
+CustomerID
+1001    3
+1002    2
+1003    2
+1008    2
+```
+
+### Concept 2: Detecting Duplicates in Specific Columns
+
+**Often you only care about duplicates in key columns, not all columns.**
+
+```python
+# Check duplicates based on specific columns only
+duplicates_by_id = df.duplicated(subset=['CustomerID'])
+print(f"Duplicates based on CustomerID: {duplicates_by_id.sum()}")
+
+# Show these duplicates
+print(df[df.duplicated(subset=['CustomerID'], keep=False)].sort_values('CustomerID'))
+```
+
+**Use cases:**
+- **Customer data:** Check `CustomerID` or `Email`
+- **Transactions:** Check `TransactionID`
+- **Products:** Check `SKU` or `ProductCode`
+- **Orders:** Check `OrderID`
+
+**Why subset matters:**
+```python
+# Example: Two rows with same CustomerID but different signup dates
+# Row 1: CustomerID=1001, SignupDate=2024-01-15
+# Row 2: CustomerID=1001, SignupDate=2024-01-16
+
+# Checking all columns: No duplicates (dates differ)
+df.duplicated().sum()  # Returns 0
+
+# Checking CustomerID only: Duplicate found!
+df.duplicated(subset=['CustomerID']).sum()  # Returns 1
+```
+
+### Concept 3: Removing Duplicate Records
+
+**`drop_duplicates()`** removes duplicate rows from DataFrame.
+
+#### Method 1: Remove All Duplicates (Keep First)
+```python
+# Remove duplicates (keep first occurrence by default)
+df_clean = df.drop_duplicates()
+
+print(f"Original: {df.shape}")
+print(f"After deduplication: {df_clean.shape}")
+print(f"Rows removed: {len(df) - len(df_clean)}")
+```
+
+**Output:**
+```
+Original: (15, 5)
+After deduplication: (10, 5)
+Rows removed: 5
+```
+
+**Behavior:**
+- First occurrence of each duplicate group is **kept**
+- Subsequent duplicates are **removed**
+- Original DataFrame is **not modified** (returns new DataFrame)
+
+#### Method 2: Keep Different Occurrences
+```python
+# Keep FIRST occurrence (default)
+df_keep_first = df.drop_duplicates(keep='first')
+
+# Keep LAST occurrence (most recent)
+df_keep_last = df.drop_duplicates(keep='last')
+
+# Keep NONE (remove all duplicates, including originals)
+df_keep_none = df.drop_duplicates(keep=False)
+```
+
+**When to use each:**
+- **`keep='first'`:** Default, when order doesn't matter or you want earliest
+- **`keep='last'`:** When you want the most recent/updated record
+- **`keep=False`:** When you only want records that are truly unique (aggressive!)
+
+**Example comparison:**
+```python
+# Data:
+# ID=1, Date=2024-01-01  (first)
+# ID=1, Date=2024-01-02  (last)
+# ID=2, Date=2024-01-03  (unique)
+
+keep='first'  → Keeps ID=1 (2024-01-01) and ID=2
+keep='last'   → Keeps ID=1 (2024-01-02) and ID=2
+keep=False    → Keeps only ID=2 (removes both ID=1 records)
+```
+
+#### Method 3: Remove Duplicates Based on Specific Columns
+```python
+# Remove duplicates based on CustomerID only
+# (Most common real-world approach!)
+df_unique = df.drop_duplicates(subset=['CustomerID'], keep='first')
+
+print(f"Original rows: {len(df)}")
+print(f"Unique customers: {len(df_unique)}")
+```
+
+**✅ This is the most common and useful approach!**
+
+**Why?**
+- Focus on business keys that define uniqueness
+- Ignore minor differences in other columns
+- One record per unique entity (customer, transaction, product)
+
+**Examples:**
+```python
+# One row per customer
+df.drop_duplicates(subset=['CustomerID'])
+
+# One row per email address
+df.drop_duplicates(subset=['Email'])
+
+# One row per transaction
+df.drop_duplicates(subset=['TransactionID'])
+
+# One row per customer-product combination
+df.drop_duplicates(subset=['CustomerID', 'ProductID'])
+```
+
+### Concept 4: Verifying Deduplication
+
+**Always verify that deduplication worked correctly.**
+
+```python
+# Step 1: Check shape changes
+print(f"Before: {df.shape}")
+print(f"After: {df_clean.shape}")
+print(f"Rows removed: {len(df) - len(df_clean)}")
+
+# Step 2: Verify no duplicates remain
+remaining_dupes = df_clean.duplicated(subset=['CustomerID']).sum()
+print(f"Remaining duplicates: {remaining_dupes}")
+
+# Step 3: Confirm uniqueness
+n_rows = len(df_clean)
+n_unique = df_clean['CustomerID'].nunique()
+print(f"Total rows: {n_rows}")
+print(f"Unique IDs: {n_unique}")
+
+if n_rows == n_unique:
+    print("✅ SUCCESS: All IDs are unique!")
+else:
+    print("⚠️ WARNING: Duplicates still exist!")
+```
+
+**Professional verification function:**
+```python
+def verify_deduplication(df, key_column):
+    """Verify no duplicates remain in key column"""
+    n_rows = len(df)
+    n_unique = df[key_column].nunique()
+    
+    if n_rows == n_unique:
+        print(f"✅ All {key_column} values are unique!")
+        return True
+    else:
+        print(f"⚠️ {n_rows - n_unique} duplicates still exist!")
+        return False
+
+verify_deduplication(df_clean, 'CustomerID')
+```
+
+### Concept 5: Impact of Duplicates on Analysis
+
+**Duplicates inflate metrics and corrupt business decisions.**
+
+#### Example: Revenue Calculation
+```python
+# Load transaction data with duplicates
+txn_df = pd.read_csv('data/raw/transactions.csv')
+
+# Revenue WITH duplicates
+revenue_with_dupes = txn_df['Amount'].sum()
+print(f"Revenue with duplicates: ${revenue_with_dupes:,.2f}")
+
+# Remove duplicates
+txn_clean = txn_df.drop_duplicates(subset=['TransactionID'])
+
+# Revenue AFTER deduplication
+revenue_clean = txn_clean['Amount'].sum()
+print(f"Revenue after dedup: ${revenue_clean:,.2f}")
+
+# Calculate overcount
+overcount = revenue_with_dupes - revenue_clean
+pct = (overcount / revenue_clean) * 100
+print(f"\nOvercount: ${overcount:,.2f} ({pct:.1f}%)")
+```
+
+**Output:**
+```
+Revenue with duplicates: $4,824.45
+Revenue after dedup: $3,749.46
+
+Overcount: $1,074.99 (28.7%)
+```
+
+**Critical insight:** Duplicate transactions inflated revenue by nearly 29%!
+
+**This affects:**
+- Sales reports (inflated numbers)
+- Commission calculations (overpaid)
+- Inventory management (wrong demand estimates)
+- Customer segmentation (wrong purchase frequency)
+- Forecasting (based on distorted historical data)
+
+### Concept 6: Complete Deduplication Workflow
+
+**Professional 5-step process:**
+
+```python
+def deduplicate_data(df, key_columns, keep='first'):
+    """
+    Complete deduplication workflow with verification
+    
+    Parameters:
+    -----------
+    df : DataFrame
+        Input DataFrame
+    key_columns : list
+        Columns to check for duplicates
+    keep : str
+        Which duplicate to keep ('first', 'last', or False)
+    
+    Returns:
+    --------
+    df_clean : DataFrame
+        Deduplicated DataFrame
+    """
+    print("=" * 60)
+    print("DEDUPLICATION WORKFLOW")
+    print("=" * 60)
+    
+    # Step 1: Inspect original
+    print(f"\n1. Original data: {df.shape}")
+    print(f"   Total rows: {len(df)}")
+    
+    # Step 2: Detect duplicates
+    n_dupes = df.duplicated(subset=key_columns).sum()
+    print(f"\n2. Duplicates found: {n_dupes}")
+    
+    if n_dupes == 0:
+        print("   ✅ No duplicates!")
+        return df
+    
+    # Step 3: Show duplicates (first 10)
+    print(f"\n3. Sample duplicates:")
+    dupes = df[df.duplicated(subset=key_columns, keep=False)]
+    print(dupes[key_columns].head(10))
+    
+    # Step 4: Remove duplicates
+    df_clean = df.drop_duplicates(subset=key_columns, keep=keep)
+    print(f"\n4. After deduplication: {df_clean.shape}")
+    print(f"   Rows removed: {len(df) - len(df_clean)}")
+    
+    # Step 5: Verify
+    remaining = df_clean.duplicated(subset=key_columns).sum()
+    print(f"\n5. Verification: {remaining} duplicates remaining")
+    
+    if remaining == 0:
+        print("   ✅ SUCCESS!")
+    else:
+        print("   ⚠️ WARNING: Duplicates still exist!")
+    
+    print("=" * 60)
+    return df_clean
+
+# Use it
+df_clean = deduplicate_data(df, ['CustomerID'], keep='first')
+```
+
+### Why This Matters
+
+**Real-world scenarios:**
+
+1. **E-commerce:** Customer appears 3 times due to system glitch
+   - **Impact:** Send same marketing email 3 times → Annoyed customer
+   - **Solution:** Deduplicate by CustomerID or Email
+
+2. **Sales Report:** Transaction recorded twice
+   - **Impact:** Revenue inflated by 30% → Wrong business decisions
+   - **Solution:** Deduplicate by TransactionID
+
+3. **Customer Database:** Same person with slightly different names
+   - **Impact:** Looks like 2 customers → Wrong segmentation
+   - **Solution:** Deduplicate by Email or Phone
+
+4. **Medical Records:** Patient record duplicated during system migration
+   - **Impact:** Double-counting patients → Resource allocation errors
+   - **Solution:** Deduplicate by PatientID
+
+**✅ Professional habit:** Always check for duplicates at the start of any analysis!
+
+### Common Mistakes to Avoid
+
+#### Mistake 1: Not Inspecting Before Removing
+```python
+# ❌ BAD: Remove blindly
+df_clean = df.drop_duplicates()  # What did we remove?
+
+# ✅ GOOD: Inspect first
+print(f"Duplicates: {df.duplicated().sum()}")
+print(df[df.duplicated(keep=False)])
+df_clean = df.drop_duplicates()
+```
+
+#### Mistake 2: Using Wrong Subset
+```python
+# Data:
+# CustomerID=1, Email=john@email.com, Phone=555-1234
+# CustomerID=1, Email=john.doe@email.com, Phone=555-1234
+
+# ❌ WRONG: Check all columns (no duplicates found - emails differ)
+df.drop_duplicates()
+
+# ✅ RIGHT: Check CustomerID only
+df.drop_duplicates(subset=['CustomerID'])
+```
+
+#### Mistake 3: Not Verifying
+```python
+# ❌ BAD: Assume it worked
+df_clean = df.drop_duplicates(subset=['ID'])
+
+# ✅ GOOD: Verify
+df_clean = df.drop_duplicates(subset=['ID'])
+print(f"Remaining duplicates: {df_clean.duplicated(subset=['ID']).sum()}")
+```
+
+#### Mistake 4: Confusing Repeats with Duplicates
+```python
+# Customer making multiple purchases → NOT a duplicate!
+# Same transaction recorded twice → IS a duplicate!
+
+# ❌ WRONG: Remove all repeated CustomerIDs
+df.drop_duplicates(subset=['CustomerID'])  # Loses purchase history!
+
+# ✅ RIGHT: Remove repeated TransactionIDs only
+df.drop_duplicates(subset=['TransactionID'])  # Keeps all unique transactions
+```
+
+### Notebook Structure
+
+The notebook `milestone_4_35_duplicate_records.ipynb` contains:
+
+1. **Part 1: Understanding Duplicate Records** (Cells 1-10)
+   - What are duplicates (exact vs partial)
+   - Why duplicates occur
+   - Loading real data with duplicates
+   - Impact on analysis
+
+2. **Part 2: Detecting Duplicate Rows** (Cells 11-25)
+   - Method 1: Using `duplicated()` to mark duplicates
+   - Method 2: Viewing all duplicate rows with `keep=False`
+   - Method 3: Counting duplicate occurrences
+   - Method 4: Detecting duplicates in specific columns
+
+3. **Part 3: Removing Duplicate Records** (Cells 26-40)
+   - Method 1: Remove all (keep first)
+   - Method 2: Remove all (keep last)
+   - Method 3: Remove all occurrences (keep none)
+   - Method 4: Remove based on specific columns (MOST COMMON)
+   - Method 5: Modify in place with `inplace=True`
+
+4. **Part 4: Comparing Keep Strategies** (Cells 41-50)
+   - Side-by-side comparison of `keep='first'`, `keep='last'`, `keep=False`
+   - Decision guide for choosing strategy
+   - Visual examples showing differences
+
+5. **Part 5: Real-World Example - Transaction Data** (Cells 51-65)
+   - Loading transaction data with duplicates
+   - Detecting duplicate transactions
+   - Analyzing duplicate patterns
+   - Removing duplicates safely
+   - Calculating impact on revenue (overcount %)
+   - Verifying deduplication success
+
+6. **Part 6: Common Mistakes and Best Practices** (Cells 66-75)
+   - Mistake 1: Not inspecting before removing
+   - Mistake 2: Using wrong subset of columns
+   - Mistake 3: Not verifying after deduplication
+   - Professional verification function
+   - Complete deduplication workflow function
+
+7. **Summary: Key Takeaways** (Cells 76-80)
+   - Detection methods table
+   - Removal methods table
+   - Professional workflow code
+   - Critical points checklist
+   - Common mistakes to avoid
+
+### Video Requirements (2 Minutes)
+
+**Must demonstrate all 5 operations:**
+
+1. **Detect Duplicates (0:10-0:35)**
+   ```python
+   # Show duplicate count
+   n_dupes = df.duplicated().sum()
+   # Show all duplicates
+   df[df.duplicated(keep=False)].sort_values('CustomerID')
+   ```
+
+2. **Remove Duplicates (0:35-1:05)**
+   ```python
+   # Before
+   print(f"Before: {df.shape}")
+   # Remove
+   df_clean = df.drop_duplicates(subset=['CustomerID'])
+   # After
+   print(f"After: {df_clean.shape}")
+   ```
+
+3. **Verify Deduplication (1:05-1:25)**
+   ```python
+   # Check remaining duplicates
+   print(f"Remaining: {df_clean.duplicated(subset=['CustomerID']).sum()}")
+   # Confirm uniqueness
+   if df_clean['CustomerID'].nunique() == len(df_clean):
+       print("✅ SUCCESS!")
+   ```
+
+4. **Show Impact on Analysis (1:25-1:50)**
+   ```python
+   # Revenue with duplicates
+   revenue_before = txn_df['Amount'].sum()
+   # Revenue after dedup
+   txn_clean = txn_df.drop_duplicates(subset=['TransactionID'])
+   revenue_after = txn_clean['Amount'].sum()
+   # Show overcount
+   print(f"Overcount: {((revenue_before - revenue_after) / revenue_after * 100):.1f}%")
+   ```
+
+5. **Explain Why It Matters (throughout)**
+   - "Duplicates inflate counts and corrupt analysis"
+   - "We overcounted revenue by 29% due to duplicates"
+   - "Each observation should be counted exactly once"
+
+**Script available in:** `MILESTONE_4_35_QUICK_GUIDE.md`
+
+### Submission Checklist
+
+- [ ] **Watched** all cells execute successfully
+- [ ] **Understood** what duplicate records are and why they occur
+- [ ] **Detected** duplicates using `duplicated()`
+- [ ] **Inspected** all duplicates using `keep=False`
+- [ ] **Removed** duplicates using `drop_duplicates(subset=...)`
+- [ ] **Compared** keep strategies (first, last, False)
+- [ ] **Verified** no duplicates remain after deduplication
+- [ ] **Calculated** impact on metrics (revenue overcount example)
+- [ ] **Explained** when NOT to remove duplicates
+- [ ] **Used** `subset` parameter for business key deduplication
+- [ ] **Showed** shape changes before and after
+- [ ] **Documented** deduplication decisions
+- [ ] **Recorded** 2-minute video showing all 5 required operations
+- [ ] **Uploaded** video following course guidelines
+- [ ] **Tested** workflow on both datasets
+
+### Deliverables
+
+- ✅ `notebooks/milestone_4_35_duplicate_records.ipynb` - Complete notebook with 80+ cells
+- ✅ `MILESTONE_4_35_QUICK_GUIDE.md` - Video script and guidelines
+- ✅ `data/raw/customer_data.csv` - Demo dataset with exact duplicates
+- ✅ `data/raw/transactions.csv` - Transaction data showing revenue impact
+
+**Next Action:** Open the notebook in Jupyter, import Pandas, load both datasets, detect duplicates with `duplicated()`, inspect all occurrences with `keep=False`, remove duplicates using `drop_duplicates(subset=...)`, verify no duplicates remain, calculate impact on revenue showing how duplicates inflated metrics, then record your demonstration explaining why duplicate records corrupt analysis and why each observation should be counted exactly once for reliable business decisions.
